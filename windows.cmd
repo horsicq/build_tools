@@ -11,7 +11,7 @@ goto exit
     )
     goto:eof
     
-:init
+:make_init
     call %VSVARS_PATH%
     %QMAKE_PATH% -query QT_VERSION > qt_tmp.txt
     set /p X_QT_VERSION=<qt_tmp.txt
@@ -31,13 +31,13 @@ goto exit
     
     goto:eof
     
-:build
+:make_build
     nmake Makefile clean
     %QMAKE_PATH% "%~1" -r -spec win32-msvc "CONFIG+=release"
     nmake
     goto:eof
     
-:translate
+:make_translate
     %X_QT_INSTALL_BINS%\lupdate.exe "%~1"
     %X_QT_INSTALL_BINS%\lrelease.exe "%~1"
     mkdir %X_SOURCE_PATH%\release\%X_BUILD_NAME%\lang
@@ -63,7 +63,7 @@ goto exit
     cd %X_SOURCE_PATH%
     goto:eof 
     
-:clear
+:make_clear
     set X_ERROR=
     set X_QT_VERSION=
     set X_QT_INSTALL_BINS=
