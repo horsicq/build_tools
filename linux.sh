@@ -10,6 +10,14 @@ function check_file
 
 function make_init
 {
+    X_ARCHITECTURE=$(uname -m)
+    export X_REVISION=$(date "+%Y%m%d")
+
+    if [[ $X_ARCHITECTURE == *"x86_64"* ]]; then
+        X_ARCHITECTURE="amd64"
+    fi
+    export X_ARCHITECTURE
+
     export X_QT_VERSION=$($QMAKE_PATH -query QT_VERSION)
     export X_QT_INSTALL_BINS=$($QMAKE_PATH -query QT_INSTALL_BINS)
     export X_QT_INSTALL_PLUGINS=$($QMAKE_PATH -query QT_INSTALL_PLUGINS)
@@ -21,6 +29,7 @@ function make_init
 
 function make_build
 {
+    make clean
     $QMAKE_PATH "$1" -spec $X_QMAKE_SPEC
     make -f Makefile
 }
@@ -34,4 +43,27 @@ function make_translate
 function make_release
 {
     echo "make_release"
+}
+
+function create_app_dir
+{
+    mkdir -p $X_SOURCE_PATH/release/$X_BUILD_NAME/DEBIAN
+    mkdir -p $X_SOURCE_PATH/release/$X_BUILD_NAME/usr
+    mkdir -p $X_SOURCE_PATH/release/$X_BUILD_NAME/usr/bin
+    mkdir -p $X_SOURCE_PATH/release/$X_BUILD_NAME/usr/lib
+    mkdir -p $X_SOURCE_PATH/release/$X_BUILD_NAME/usr/lib/$1
+    mkdir -p $X_SOURCE_PATH/release/$X_BUILD_NAME/usr/lib/$1/lang
+    mkdir -p $X_SOURCE_PATH/release/$X_BUILD_NAME/usr/share
+    mkdir -p $X_SOURCE_PATH/release/$X_BUILD_NAME/usr/share/applications
+    mkdir -p $X_SOURCE_PATH/release/$X_BUILD_NAME/usr/share/icons
+}
+
+function make_deb
+{
+    dpkg -b $X_SOURCE_PATH/release/$X_BUILD_NAME
+}
+
+function make_clear
+{
+    rm -rf $X_SOURCE_PATH/release/$X_BUILD_NAME
 }
