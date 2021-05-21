@@ -54,6 +54,13 @@ goto exit
     copy %X_QT_INSTALL_PLUGINS%\%~1\%~2.dll %X_SOURCE_PATH%\release\%X_BUILD_NAME%\%~1\
     goto:eof
     
+:deploy_vc_redist
+    copy "%VCToolsRedistDir%\%Platform%\Microsoft.VC142.CRT\msvcp140.dll" %X_SOURCE_PATH%\release\%X_BUILD_NAME%\
+    copy "%VCToolsRedistDir%\%Platform%\Microsoft.VC142.CRT\vcruntime140.dll" %X_SOURCE_PATH%\release\%X_BUILD_NAME%\
+    copy "%VCToolsRedistDir%\%Platform%\Microsoft.VC142.CRT\msvcp140_1.dll" %X_SOURCE_PATH%\release\%X_BUILD_NAME%\
+    copy "%VCToolsRedistDir%\%Platform%\Microsoft.VC142.CRT\vcruntime140_1.dll" %X_SOURCE_PATH%\release\%X_BUILD_NAME%\
+    goto:eof
+    
 :make_release
     cd %X_SOURCE_PATH%\release
     set X_ZIP_NAME=%X_BUILD_NAME%_%X_RELEASE_VERSION%
