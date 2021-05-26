@@ -10,10 +10,11 @@ function check_file
 
 function make_init
 {
-    X_ARCHITECTURE=$(uname -m)
+    X_UNAME=$(uname -m)
     export X_REVISION=$(date "+%Y%m%d")
 
-    if [[ $X_ARCHITECTURE == *"x86_64"* ]]; then
+    X_ARCHITECTURE="i386"
+    if [[ $X_UNAME == *"x86_64"* ]]; then
         X_ARCHITECTURE="amd64"
     fi
     export X_ARCHITECTURE
