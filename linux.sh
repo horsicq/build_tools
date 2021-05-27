@@ -31,7 +31,10 @@ function make_init
 
 function make_build
 {
-    make clean
+    if test -f "Makefile"; then
+        make clean
+    fi
+    
     $QMAKE_PATH "$1" -spec $X_QMAKE_SPEC
     make -f Makefile
 }

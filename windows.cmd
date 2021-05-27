@@ -32,7 +32,9 @@ goto exit
     goto:eof
     
 :make_build
-    nmake Makefile clean
+    IF EXIST "Makefile" (
+        nmake Makefile clean
+    )
     %QMAKE_PATH% "%~1" -r -spec win32-msvc "CONFIG+=release"
     nmake
     goto:eof

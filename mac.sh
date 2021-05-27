@@ -21,6 +21,10 @@ function make_init
 
 function make_build
 {
+    if test -f "Makefile"; then
+        make clean
+    fi
+
     $QMAKE_PATH "$1" -spec $X_QMAKE_SPEC CONFIG+=x86_64
     make -f Makefile
 }
