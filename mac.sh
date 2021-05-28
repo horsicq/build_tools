@@ -67,6 +67,9 @@ function fiximport
     fixlibrary QtSvg $1
     fixlibrary QtOpenGL $1
     fixlibrary QtConcurrent $1
+    fixlibrary QtScript $1
+    fixlibrary QtScriptTools $1
+    fixlibrary QtNetwork $1
 }
 
 function deploy_qt_library
