@@ -35,7 +35,7 @@ goto exit
     IF EXIST "Makefile" (
         nmake Makefile clean
     )
-    %QMAKE_PATH% "%~1" -r -spec win32-msvc "CONFIG+=release"
+    %QMAKE_PATH% "%~1" -r -spec %X_QMAKE_SPEC% "CONFIG+=release"
     nmake
     goto:eof
     
@@ -43,7 +43,7 @@ goto exit
     %X_QT_INSTALL_BINS%\lupdate.exe "%~1"
     %X_QT_INSTALL_BINS%\lrelease.exe "%~1"
     mkdir %X_SOURCE_PATH%\release\%X_BUILD_NAME%\lang
-    move translation\*.qm  %X_SOURCE_PATH%\release\%X_BUILD_NAME%\lang\
+    xcopy translation\*.qm  %X_SOURCE_PATH%\release\%X_BUILD_NAME%\lang\  /Y
     goto:eof
    
 :deploy_qt_library
@@ -57,10 +57,19 @@ goto exit
     goto:eof
     
 :deploy_vc_redist
-    copy "%VCToolsRedistDir%\%Platform%\Microsoft.VC142.CRT\msvcp140.dll" %X_SOURCE_PATH%\release\%X_BUILD_NAME%\
-    copy "%VCToolsRedistDir%\%Platform%\Microsoft.VC142.CRT\vcruntime140.dll" %X_SOURCE_PATH%\release\%X_BUILD_NAME%\
-    copy "%VCToolsRedistDir%\%Platform%\Microsoft.VC142.CRT\msvcp140_1.dll" %X_SOURCE_PATH%\release\%X_BUILD_NAME%\
-    copy "%VCToolsRedistDir%\%Platform%\Microsoft.VC142.CRT\vcruntime140_1.dll" %X_SOURCE_PATH%\release\%X_BUILD_NAME%\
+    echo %VisualStudioVersion%
+    if "%VisualStudioVersion%" == "12.0" (
+        echo "Test1"
+        copy "%VCINSTALLDIR%\redist\x86\Microsoft.VC120.CRT\msvcp120.dll" %X_SOURCE_PATH%\release\%X_BUILD_NAME%\
+        copy "%VCINSTALLDIR%\redist\x86\Microsoft.VC120.CRT\msvcr120.dll" %X_SOURCE_PATH%\release\%X_BUILD_NAME%\
+    )
+    if "%VisualStudioVersion%" == "16.0" (
+        copy "%VCToolsRedistDir%\%Platform%\Microsoft.VC142.CRT\msvcp140.dll" %X_SOURCE_PATH%\release\%X_BUILD_NAME%\
+        copy "%VCToolsRedistDir%\%Platform%\Microsoft.VC142.CRT\vcruntime140.dll" %X_SOURCE_PATH%\release\%X_BUILD_NAME%\
+        copy "%VCToolsRedistDir%\%Platform%\Microsoft.VC142.CRT\msvcp140_1.dll" %X_SOURCE_PATH%\release\%X_BUILD_NAME%\
+        copy "%VCToolsRedistDir%\%Platform%\Microsoft.VC142.CRT\vcruntime140_1.dll" %X_SOURCE_PATH%\release\%X_BUILD_NAME%\
+    )
+    
     goto:eof
     
 :make_release
