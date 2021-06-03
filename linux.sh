@@ -20,7 +20,6 @@ function make_init
     export X_ARCHITECTURE
 
     export X_QT_VERSION=$($QMAKE_PATH -query QT_VERSION)
-    export X_QT_VERSION=$($QMAKE_PATH -query QT_VERSION)
     export X_QT_INSTALL_BINS=$($QMAKE_PATH -query QT_INSTALL_BINS)
     export X_QT_INSTALL_PLUGINS=$($QMAKE_PATH -query QT_INSTALL_PLUGINS)
     export X_QT_INSTALL_LIBS=$($QMAKE_PATH -query QT_INSTALL_LIBS)
@@ -50,7 +49,7 @@ function make_release
     echo "make_release"
 }
 
-function create_app_dir
+function create_deb_app_dir
 {
     mkdir -p $X_SOURCE_PATH/release/$X_BUILD_NAME/DEBIAN
     mkdir -p $X_SOURCE_PATH/release/$X_BUILD_NAME/usr
@@ -61,6 +60,19 @@ function create_app_dir
     mkdir -p $X_SOURCE_PATH/release/$X_BUILD_NAME/usr/share
     mkdir -p $X_SOURCE_PATH/release/$X_BUILD_NAME/usr/share/applications
     mkdir -p $X_SOURCE_PATH/release/$X_BUILD_NAME/usr/share/icons
+}
+
+function create_image_app_dir
+{
+    mkdir -p $X_SOURCE_PATH/release/appDir
+    mkdir -p $X_SOURCE_PATH/release/appDir/usr
+    mkdir -p $X_SOURCE_PATH/release/appDir/usr/bin
+    mkdir -p $X_SOURCE_PATH/release/appDir/usr/lib
+    mkdir -p $X_SOURCE_PATH/release/appDir/usr/lib/$1
+    mkdir -p $X_SOURCE_PATH/release/appDir/usr/lib/$1/lang
+    mkdir -p $X_SOURCE_PATH/release/appDir/usr/share
+    mkdir -p $X_SOURCE_PATH/release/appDir/usr/share/applications
+    mkdir -p $X_SOURCE_PATH/release/appDir/usr/share/icons
 }
 
 function make_deb
