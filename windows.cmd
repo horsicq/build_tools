@@ -12,7 +12,20 @@ goto exit
     goto:eof
     
 :make_init
+    echo "init"
+:msvc_env
+    IF [%VSVARS_PATH%] == [] goto mingw_env
     call %VSVARS_PATH%
+    set X_MAKE=nmake
+    goto qmake_env
+:mingw_env
+    IF [%MINGWVARS_PATH%] == [] goto qmake_env
+    call %MINGWVARS_PATH%
+    set X_MAKE=mingw32-make
+    goto qmake_env
+    set X_ERROR="TRUE"
+    echo "Please set MSVC or MINGW"
+:qmake_env
     %QMAKE_PATH% -query QT_VERSION > qt_tmp.txt
     set /p X_QT_VERSION=<qt_tmp.txt
     %QMAKE_PATH% -query QT_INSTALL_BINS > qt_tmp.txt
@@ -28,15 +41,16 @@ goto exit
     
     mkdir %X_SOURCE_PATH%\release
     mkdir %X_SOURCE_PATH%\release\%X_BUILD_NAME%
+    mkdir %X_SOURCE_PATH%\build\release
     
     goto:eof
     
 :make_build
     IF EXIST "Makefile" (
-        nmake Makefile clean
+        %X_MAKE% clean
     )
     %QMAKE_PATH% "%~1" -r -spec %X_QMAKE_SPEC% "CONFIG+=release"
-    nmake
+    %X_MAKE%
     goto:eof
     
 :make_translate
@@ -68,6 +82,25 @@ goto exit
         copy "%VCToolsRedistDir%\%Platform%\Microsoft.VC142.CRT\vcruntime140.dll" %X_SOURCE_PATH%\release\%X_BUILD_NAME%\
         copy "%VCToolsRedistDir%\%Platform%\Microsoft.VC142.CRT\msvcp140_1.dll" %X_SOURCE_PATH%\release\%X_BUILD_NAME%\
         copy "%VCToolsRedistDir%\%Platform%\Microsoft.VC142.CRT\vcruntime140_1.dll" %X_SOURCE_PATH%\release\%X_BUILD_NAME%\
+    )
+    
+    goto:eof
+    
+:deploy_redist
+    if "%VisualStudioVersion%" == "12.0" (
+        copy "%VCINSTALLDIR%\redist\x86\Microsoft.VC120.CRT\msvcp120.dll" %X_SOURCE_PATH%\release\%X_BUILD_NAME%\
+        copy "%VCINSTALLDIR%\redist\x86\Microsoft.VC120.CRT\msvcr120.dll" %X_SOURCE_PATH%\release\%X_BUILD_NAME%\
+    )
+    if "%VisualStudioVersion%" == "16.0" (
+        copy "%VCToolsRedistDir%\%Platform%\Microsoft.VC142.CRT\msvcp140.dll" %X_SOURCE_PATH%\release\%X_BUILD_NAME%\
+        copy "%VCToolsRedistDir%\%Platform%\Microsoft.VC142.CRT\vcruntime140.dll" %X_SOURCE_PATH%\release\%X_BUILD_NAME%\
+        copy "%VCToolsRedistDir%\%Platform%\Microsoft.VC142.CRT\msvcp140_1.dll" %X_SOURCE_PATH%\release\%X_BUILD_NAME%\
+        copy "%VCToolsRedistDir%\%Platform%\Microsoft.VC142.CRT\vcruntime140_1.dll" %X_SOURCE_PATH%\release\%X_BUILD_NAME%\
+    )
+    if "%X_QMAKE_SPEC%" == "win32-g++" (
+        copy "%X_QT_INSTALL_BINS%\libgcc_s_dw2-1.dll" %X_SOURCE_PATH%\release\%X_BUILD_NAME%\
+        copy "%X_QT_INSTALL_BINS%\libstdc++-6.dll" %X_SOURCE_PATH%\release\%X_BUILD_NAME%\
+        copy "%X_QT_INSTALL_BINS%\libwinpthread-1.dll" %X_SOURCE_PATH%\release\%X_BUILD_NAME%\
     )
     
     goto:eof
