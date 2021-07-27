@@ -114,7 +114,8 @@ goto exit
     cd %X_SOURCE_PATH%
     IF [%INNOSETUP_PATH%] == [] goto make_release_end
     %INNOSETUP_PATH% install.iss
-    ren %X_SOURCE_PATH%\release\install.exe %X_SOURCE_PATH%\release\%X_BUILD_NAME%_%X_BUILD_PREFIX%_install_%X_RELEASE_VERSION%.exe
+    if exist "%X_SOURCE_PATH%\release\%X_BUILD_NAME%_%X_BUILD_PREFIX%_install_%X_RELEASE_VERSION%.exe" del "%X_SOURCE_PATH%\release\%X_BUILD_NAME%_%X_BUILD_PREFIX%_install_%X_RELEASE_VERSION%.exe"
+    ren "%X_SOURCE_PATH%\release\install.exe" "%X_BUILD_NAME%_%X_BUILD_PREFIX%_install_%X_RELEASE_VERSION%.exe"
 :make_release_end
     goto:eof 
     
