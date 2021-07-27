@@ -43,7 +43,7 @@ function make_release
     #hdiutil create -format UDBZ -quiet -srcfolder $X_SOURCE_PATH/release/$BUILD_NAME $X_SOURCE_PATH/release/${X_BUILD_NAME}_${X_RELEASE_VERSION}.dmg
     
     if [ -n "$X_PRIVATE_CERT_APP" ]; then
-        codesign --deep -f -v -s ${X_PRIVATE_CERT_APP} -o runtime $X_SOURCE_PATH/release/${X_BUILD_NAME}/$1.app 
+        codesign --deep -f -v -s "$X_PRIVATE_CERT_APP" -o runtime $X_SOURCE_PATH/release/${X_BUILD_NAME}/$1.app 
     fi
     
     cd $X_SOURCE_PATH/release/
@@ -52,7 +52,7 @@ function make_release
     
     if [ -n "$X_PRIVATE_CERT_INSTALL" ]; then
         pkgbuild --analyze --root $X_SOURCE_PATH/release/${X_BUILD_NAME}/$1.app $X_SOURCE_PATH/release/${X_BUILD_NAME}/$1.plist
-        pkgbuild --root $X_SOURCE_PATH/release/${X_BUILD_NAME}/$1.app --component-plist $X_SOURCE_PATH/release/${X_BUILD_NAME}/$1.plist  $X_SOURCE_PATH/release/${X_BUILD_NAME}_${X_RELEASE_VERSION}.pkg --sign ${X_PRIVATE_CERT_INSTALL} --identifier $X_PRIVATE_NOTARIZE_BUNDLE --install-location /Applications/$1.app
+        pkgbuild --root $X_SOURCE_PATH/release/${X_BUILD_NAME}/$1.app --component-plist $X_SOURCE_PATH/release/${X_BUILD_NAME}/$1.plist  $X_SOURCE_PATH/release/${X_BUILD_NAME}_${X_RELEASE_VERSION}.pkg --sign "$X_PRIVATE_CERT_INSTALL" --identifier $X_PRIVATE_NOTARIZE_BUNDLE --install-location /Applications/$1.app
     fi
     
     if [ -n "$X_PRIVATE_NOTARIZE_PWD" ]; then
