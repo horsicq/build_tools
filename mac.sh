@@ -60,6 +60,8 @@ function make_release
         xcrun altool --notarize-app -f $X_SOURCE_PATH/release/${X_BUILD_NAME}_portable_${X_RELEASE_VERSION}.zip --primary-bundle $X_PRIVATE_NOTARIZE_BUNDLE -u ${X_PRIVATE_NOTARIZE_LOGIN} -p ${X_PRIVATE_NOTARIZE_PWD}
         xcrun altool --notarize-app -f $X_SOURCE_PATH/release/${X_BUILD_NAME}_${X_RELEASE_VERSION}.pkg --primary-bundle $X_PRIVATE_NOTARIZE_BUNDLE -u ${X_PRIVATE_NOTARIZE_LOGIN} -p ${X_PRIVATE_NOTARIZE_PWD}
     fi
+    
+    zip -d $X_SOURCE_PATH/release/${X_BUILD_NAME}_portable_${X_RELEASE_VERSION}.zip __MACOSX/\*
 
     cd $X_SOURCE_PATH
 }
