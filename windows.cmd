@@ -107,10 +107,14 @@ goto exit
     
 :make_release
     cd %X_SOURCE_PATH%\release
-    set X_ZIP_NAME=%X_BUILD_NAME%_%X_RELEASE_VERSION%
+    set X_ZIP_NAME=%X_BUILD_NAME%_%X_BUILD_PREFIX%_portable_%X_RELEASE_VERSION%
     if exist %X_ZIP_NAME%.zip del %X_ZIP_NAME%.zip
     %SEVENZIP_PATH% a %X_ZIP_NAME%.zip %X_BUILD_NAME%\*
     set X_ZIP_NAME=
+    
+    IF [%INNOSETUP_PATH%] == [] goto make_release_end
+    
+:make_release_end
     cd %X_SOURCE_PATH%
     goto:eof 
     

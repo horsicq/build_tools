@@ -8,6 +8,8 @@ Visual Studio Community 2019 (version 16.7): https://my.visualstudio.com/downloa
 
 7-Zip: https://www.7-zip.org/
 
+Inno Setup: https://jrsoftware.org/isdl.php
+
 (Linux)Qt 5.6.3(x64): https://download.qt.io/new_archive/qt/5.6/5.6.3/qt-opensource-linux-x64-5.6.3.run
 
 (Linux)Qt 5.9-5.15(x64): https://www.qt.io/download
