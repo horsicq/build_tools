@@ -39,11 +39,27 @@ function make_translate
 
 function make_release
 {
-    rm -rf $X_SOURCE_PATH/release/${X_BUILD_NAME}_${X_RELEASE_VERSION}.dmg
-    hdiutil create -format UDBZ -quiet -srcfolder $X_SOURCE_PATH/release/$BUILD_NAME $X_SOURCE_PATH/release/${X_BUILD_NAME}_${X_RELEASE_VERSION}.dmg
+    #rm -rf $X_SOURCE_PATH/release/${X_BUILD_NAME}_${X_RELEASE_VERSION}.dmg
+    #hdiutil create -format UDBZ -quiet -srcfolder $X_SOURCE_PATH/release/$BUILD_NAME $X_SOURCE_PATH/release/${X_BUILD_NAME}_${X_RELEASE_VERSION}.dmg
+    
+    if[ -n "$X_PRIVATE_CERT_APP"]
+        codesign --deep -f -v -s ${X_PRIVATE_CERT_APP} -o runtime $X_SOURCE_PATH/release/${X_BUILD_NAME}/$1.app 
+    fi
+    
     cd $X_SOURCE_PATH/release/
-    rm -rf $X_SOURCE_PATH/release/${X_BUILD_NAME}_${X_RELEASE_VERSION}.zip
-    zip -r $X_SOURCE_PATH/release/${X_BUILD_NAME}_${X_RELEASE_VERSION}.zip ${X_BUILD_NAME}
+    rm -rf $X_SOURCE_PATH/release/${X_BUILD_NAME}_portable_${X_RELEASE_VERSION}.zip
+    /usr/bin/ditto -c -k --sequesterRsrc --keepParent $X_SOURCE_PATH/release/${X_BUILD_NAME}/$1.app $X_SOURCE_PATH/release/${X_BUILD_NAME}_portable_${X_RELEASE_VERSION}.zip
+    
+    if[ -n "$X_PRIVATE_CERT_INSTALL"]
+        pkgbuild --analyze --root $X_SOURCE_PATH/release/${X_BUILD_NAME}/$1.app $X_SOURCE_PATH/release/${X_BUILD_NAME}/$1.plist
+        pkgbuild --root $X_SOURCE_PATH/release/${X_BUILD_NAME}/$1.app --component-plist $X_SOURCE_PATH/release/${X_BUILD_NAME}/$1.plist  $X_SOURCE_PATH/release/${X_BUILD_NAME}_${X_RELEASE_VERSION}.pkg --sign ${X_PRIVATE_CERT_INSTALL} --identifier $X_PRIVATE_NOTARIZE_BUNDLE --install-location /Applications/$1.app
+    fi
+    
+    if[ -n "$X_PRIVATE_NOTARIZE_PWD"]
+        xcrun altool --notarize-app -f $X_SOURCE_PATH/release/${X_BUILD_NAME}_portable_${X_RELEASE_VERSION}.zip --primary-bundle $X_PRIVATE_NOTARIZE_BUNDLE -u ${X_PRIVATE_NOTARIZE_LOGIN} -p ${X_PRIVATE_NOTARIZE_PWD}
+        xcrun altool --notarize-app -f $X_SOURCE_PATH/release/${X_BUILD_NAME}_${X_RELEASE_VERSION}.pkg --primary-bundle $X_PRIVATE_NOTARIZE_BUNDLE -u ${X_PRIVATE_NOTARIZE_LOGIN} -p ${X_PRIVATE_NOTARIZE_PWD}
+    fi
+
     cd $X_SOURCE_PATH
 }
 
