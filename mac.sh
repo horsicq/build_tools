@@ -43,7 +43,8 @@ function make_release
     #hdiutil create -format UDBZ -quiet -srcfolder $X_SOURCE_PATH/release/$BUILD_NAME $X_SOURCE_PATH/release/${X_BUILD_NAME}_${X_RELEASE_VERSION}.dmg
     
     if [ -n "$X_PRIVATE_CERT_APP" ]; then
-        codesign --deep -f -v -s "$X_PRIVATE_CERT_APP" -o runtime $X_SOURCE_PATH/release/${X_BUILD_NAME}/$1.app/Contents/MacOS/$1
+        find $X_SOURCE_PATH/release/${X_BUILD_NAME}/$1.app/ -type f -exec codesign --force --verify --verbose --sign "$X_PRIVATE_CERT_APP" {} \;
+        codesign --force --verify --verbose --sign "$X_PRIVATE_CERT_APP" $X_SOURCE_PATH/release/${X_BUILD_NAME}/$1.app/
     fi
     
     cd $X_SOURCE_PATH/release/
