@@ -44,7 +44,7 @@ function make_release
     
     if [ -n "$X_PRIVATE_CERT_APP" ]; then
         find $X_SOURCE_PATH/release/${X_BUILD_NAME}/$1.app/ -type f -exec codesign --force --verify --verbose --sign "$X_PRIVATE_CERT_APP" {} \;
-        codesign --force --verify --verbose --sign "$X_PRIVATE_CERT_APP" $X_SOURCE_PATH/release/${X_BUILD_NAME}/$1.app/
+        codesign --force --verify --verbose --sign "$X_PRIVATE_CERT_APP" -o runtime $X_SOURCE_PATH/release/${X_BUILD_NAME}/$1.app/Contents/MacOS/$1
     fi
     
     cd $X_SOURCE_PATH/release/
