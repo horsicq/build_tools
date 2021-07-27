@@ -113,7 +113,7 @@ goto exit
     set X_ZIP_NAME=
     
     IF [%INNOSETUP_PATH%] == [] goto make_release_end
-    
+    %INNOSETUP_PATH% install.iss
 :make_release_end
     cd %X_SOURCE_PATH%
     goto:eof 
