@@ -46,6 +46,7 @@ function make_translate
 
 function make_release
 {
+    # TODO
     echo "make_release"
 }
 
