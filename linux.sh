@@ -19,6 +19,7 @@ function make_init
     fi
     export X_ARCHITECTURE
 
+    export X_OS_VERSION=$(lsb_release -is)_$(lsb_release -rs)
     export X_QT_VERSION=$($QMAKE_PATH -query QT_VERSION)
     export X_QT_INSTALL_BINS=$($QMAKE_PATH -query QT_INSTALL_BINS)
     export X_QT_INSTALL_PLUGINS=$($QMAKE_PATH -query QT_INSTALL_PLUGINS)
