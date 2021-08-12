@@ -18,8 +18,11 @@ function make_init
         X_ARCHITECTURE="amd64"
     fi
     export X_ARCHITECTURE
+    
+    X_OS_NAME=$(lsb_release -is)
+    X_OS_NUMBER=$(lsb_release -rs)
 
-    export X_OS_VERSION=$(lsb_release -is)_$(lsb_release -rs)
+    export X_OS_VERSION=$X_OS_NAME_$X_OS_NUMBER
     export X_QT_VERSION=$($QMAKE_PATH -query QT_VERSION)
     export X_QT_INSTALL_BINS=$($QMAKE_PATH -query QT_INSTALL_BINS)
     export X_QT_INSTALL_PLUGINS=$($QMAKE_PATH -query QT_INSTALL_PLUGINS)
