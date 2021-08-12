@@ -22,7 +22,7 @@ function make_init
     X_OS_NAME=$(lsb_release -is)
     X_OS_NUMBER=$(lsb_release -rs)
 
-    export X_OS_VERSION=$X_OS_NAME_$X_OS_NUMBER
+    export X_OS_VERSION=${X_OS_NAME}_${X_OS_NUMBER}
     export X_QT_VERSION=$($QMAKE_PATH -query QT_VERSION)
     export X_QT_INSTALL_BINS=$($QMAKE_PATH -query QT_INSTALL_BINS)
     export X_QT_INSTALL_PLUGINS=$($QMAKE_PATH -query QT_INSTALL_PLUGINS)
