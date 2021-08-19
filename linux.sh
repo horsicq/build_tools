@@ -19,6 +19,7 @@ function make_init
     fi
     export X_ARCHITECTURE
     
+    # TODO Check command if exists
     X_OS_NAME=$(lsb_release -is)
     X_OS_NUMBER=$(lsb_release -rs)
 
