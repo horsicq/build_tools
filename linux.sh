@@ -13,6 +13,7 @@ function make_init
     X_UNAME=$(uname -m)
     export X_REVISION=$(date "+%Y%m%d")
 
+    # TODO more
     X_ARCHITECTURE="i386"
     if [[ $X_UNAME == *"x86_64"* ]]; then
         X_ARCHITECTURE="amd64"
