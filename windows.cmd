@@ -53,6 +53,14 @@ goto exit
     %X_MAKE%
     goto:eof
     
+:make_build_pdb
+    IF EXIST "Makefile" (
+        %X_MAKE% clean
+    )
+    %QMAKE_PATH% "%~1" -r -spec %X_QMAKE_SPEC% "CONFIG+=release" "DEFINES+=CREATE_PDB"
+    %X_MAKE%
+    goto:eof
+    
 :make_translate
     %X_QT_INSTALL_BINS%\lupdate.exe "%~1"
     %X_QT_INSTALL_BINS%\lrelease.exe "%~1"
