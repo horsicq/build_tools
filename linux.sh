@@ -90,6 +90,7 @@ function make_deb
 function make_rpm
 {
     # TODO
+    echo "make_rpm"
 }
 
 function make_clear
