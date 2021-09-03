@@ -87,6 +87,11 @@ function make_deb
     dpkg -b $X_SOURCE_PATH/release/$X_BUILD_NAME
 }
 
+function make_rpm
+{
+    # TODO
+}
+
 function make_clear
 {
     rm -rf $X_SOURCE_PATH/release/$X_BUILD_NAME
