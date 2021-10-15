@@ -1,4 +1,4 @@
-How to runn app in OSX that’s not signed by a developer
+How to runn app in OSX that is not signed by a developer
 =======
 - Right-click the app(Ctrl + Click).
 - Select Open.
