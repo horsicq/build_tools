@@ -18,6 +18,11 @@ function make_init
     if [[ $X_UNAME == *"x86_64"* ]]; then
         X_ARCHITECTURE="amd64"
     fi
+    
+    if [[ $X_UNAME == *"armv7l"* ]]; then
+        X_ARCHITECTURE="armhf"
+    fi
+    
     export X_ARCHITECTURE
     
     # TODO Check command if exists
