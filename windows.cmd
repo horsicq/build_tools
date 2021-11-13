@@ -123,7 +123,7 @@ goto exit
     if exist %X_ZIP_NAME%.zip del %X_ZIP_NAME%.zip
     cd %X_SOURCE_PATH%\release\%X_BUILD_NAME%\
     
-    %SEVENZIP_PATH% a %SOURCE_PATH%\release\%X_ZIP_NAME%.zip *
+    %SEVENZIP_PATH% a %X_SOURCE_PATH%\release\%X_ZIP_NAME%.zip *
     set X_ZIP_NAME=
     cd %X_SOURCE_PATH%
     IF [%INNOSETUP_PATH%] == [] goto make_release_end

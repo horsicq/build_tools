@@ -93,7 +93,12 @@ function fiximport
 
 function deploy_qt
 {
-    "$X_QT_INSTALL_BINS/macdeployqt" $X_SOURCE_PATH/release/${X_BUILD_NAME}/$1.app -codesign="$X_PRIVATE_CERT_APP"
+    "$X_QT_INSTALL_BINS/macdeployqt" $X_SOURCE_PATH/release/${X_BUILD_NAME}/$1.app
+}
+
+function deploy_qt_sign
+{
+    "$X_QT_INSTALL_BINS/macdeployqt" $X_SOURCE_PATH/release/${X_BUILD_NAME}/$1.app -codesign="$X_PRIVATE_CERT_APP" -hardened-runtime -timestamp
 }
 
 function deploy_qt_library
