@@ -43,9 +43,9 @@ function make_release
     #rm -rf $X_SOURCE_PATH/release/${X_BUILD_NAME}_${X_RELEASE_VERSION}.dmg
     #hdiutil create -format UDBZ -quiet -srcfolder $X_SOURCE_PATH/release/$BUILD_NAME $X_SOURCE_PATH/release/${X_BUILD_NAME}_${X_RELEASE_VERSION}.dmg
     
-    if [ -n "$X_PRIVATE_CERT_APP" ]; then
-        codesign --deep -f -v -s "$X_PRIVATE_CERT_APP" -o runtime $X_SOURCE_PATH/release/${X_BUILD_NAME}/$1.app
-    fi
+    #if [ -n "$X_PRIVATE_CERT_APP" ]; then
+    #    codesign --deep -f -v -s "$X_PRIVATE_CERT_APP" -o runtime $X_SOURCE_PATH/release/${X_BUILD_NAME}/$1.app
+    #fi
     
     cd $X_SOURCE_PATH/release/
     rm -rf $X_SOURCE_PATH/release/${X_BUILD_NAME}_portable_${X_RELEASE_VERSION}.zip
@@ -93,7 +93,7 @@ function fiximport
 
 function deploy_qt
 {
-    "$X_QT_INSTALL_BINS/macdeployqt" $X_SOURCE_PATH/release/${X_BUILD_NAME}/$1.app
+    "$X_QT_INSTALL_BINS/macdeployqt" $X_SOURCE_PATH/release/${X_BUILD_NAME}/$1.app -codesign "$X_PRIVATE_CERT_APP"
 }
 
 function deploy_qt_library
