@@ -24,7 +24,7 @@ goto exit
     set X_MAKE=mingw32-make
     goto qmake_env
     set X_ERROR="TRUE"
-    echo "Please set MSVC or MINGW"
+    echo "Please set MSVC or MinGW"
 :qmake_env
     %QMAKE_PATH% -query QT_VERSION > qt_tmp.txt
     set /p X_QT_VERSION=<qt_tmp.txt
