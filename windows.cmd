@@ -43,6 +43,9 @@ goto exit
     mkdir %X_SOURCE_PATH%\release\%X_BUILD_NAME%
     mkdir %X_SOURCE_PATH%\build\release
     
+    xcopy %X_SOURCE_PATH%\build_tools\windows.manifest.xml %X_SOURCE_PATH%\gui_source\ /Y
+    xcopy %X_SOURCE_PATH%\build_tools\build.pri %X_SOURCE_PATH%\ /Y
+    
     goto:eof
     
 :make_build

@@ -17,6 +17,8 @@ function make_init
     export X_QMAKE_SPEC=$($QMAKE_PATH -query QMAKE_SPEC)
     mkdir -p "$X_SOURCE_PATH/release"
     mkdir -p "$X_SOURCE_PATH/release/$X_BUILD_NAME"
+    
+    cp -f $X_SOURCE_PATH/build_tools/build.pri                  $X_SOURCE_PATH/
 }
 
 function make_build
