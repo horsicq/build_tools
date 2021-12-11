@@ -128,6 +128,7 @@ goto exit
         copy "%X_QT_INSTALL_BINS%\libstdc++-6.dll" %X_SOURCE_PATH%\release\%X_BUILD_NAME%\
         copy "%X_QT_INSTALL_BINS%\libwinpthread-1.dll" %X_SOURCE_PATH%\release\%X_BUILD_NAME%\
     )
+    rem TODO more
     
     goto:eof
     
