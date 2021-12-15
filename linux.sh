@@ -89,6 +89,16 @@ function create_image_app_dir
     mkdir -p $X_SOURCE_PATH/release/appDir/usr/share/icons
 }
 
+function create_run_shell 
+{
+    echo "#!/bin/sh" >> $1
+    echo "CWD=\$(dirname \$0)" >> $1
+    echo "export LD_LIBRARY_PATH=\"\$CWD/base:\$LD_LIBRARY_PATH\"" >> $1
+    echo "\$CWD/base/$2 \$*" >> $1
+    
+    chmod +x $1
+}
+
 function make_deb
 {
     dpkg -b $X_SOURCE_PATH/release/$X_BUILD_NAME
@@ -98,6 +108,12 @@ function make_rpm
 {
     # TODO
     echo "make_rpm"
+}
+
+function make_targz
+{
+    tar -cvf $2.tar $1
+    gzip --best $2.tar
 }
 
 function make_clear
