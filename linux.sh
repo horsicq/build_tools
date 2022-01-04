@@ -76,6 +76,34 @@ function create_deb_app_dir
     mkdir -p $X_SOURCE_PATH/release/$X_BUILD_NAME/usr/share/icons
 }
 
+function create_deb_control
+{
+# TODO Installed-Size:
+    echo "" > $1
+
+    if [ -n "$X_PACKAGENAME" ]; then
+        echo "Package: $X_PACKAGENAME\n" >> $1
+    fi
+    if [ -n "$X_RELEASE_VERSION" ]; then
+        echo "Version: $X_RELEASE_VERSION\n" >> $1
+    fi
+    if [ -n "$X_ARCHITECTURE" ]; then
+        echo "Architecture: $X_ARCHITECTURE\n" >> $1
+    fi
+    if [ -n "$X_MAINTAINER" ]; then
+        echo "Maintainer: $X_MAINTAINER\n" >> $1
+    fi
+    if [ -n "$X_DEPENDS" ]; then
+        echo "Depends: $X_DEPENDS\n" >> $1
+    fi
+    if [ -n "$X_HOMEPAGE" ]; then
+        echo "Homepage: $X_HOMEPAGE\n" >> $1
+    fi
+    if [ -n "$X_DESCRIPTION" ]; then
+        echo "Description: $X_DESCRIPTION\n" >> $1
+    fi
+}
+
 function create_image_app_dir
 {
     mkdir -p $X_SOURCE_PATH/release/appDir
