@@ -110,25 +110,25 @@ function create_deb_control
     echo "" > $1
 
     if [ -n "$X_PACKAGENAME" ]; then
-        echo "Package: $X_PACKAGENAME\n" >> $1
+        echo "Package: $X_PACKAGENAME" >> $1
     fi
     if [ -n "$X_RELEASE_VERSION" ]; then
-        echo "Version: $X_RELEASE_VERSION\n" >> $1
+        echo "Version: $X_RELEASE_VERSION" >> $1
     fi
     if [ -n "$X_ARCHITECTURE" ]; then
-        echo "Architecture: $X_ARCHITECTURE\n" >> $1
+        echo "Architecture: $X_ARCHITECTURE" >> $1
     fi
     if [ -n "$X_MAINTAINER" ]; then
-        echo "Maintainer: $X_MAINTAINER\n" >> $1
+        echo "Maintainer: $X_MAINTAINER" >> $1
     fi
     if [ -n "$X_DEPENDS" ]; then
-        echo "Depends: $X_DEPENDS\n" >> $1
+        echo "Depends: $X_DEPENDS" >> $1
     fi
     if [ -n "$X_HOMEPAGE" ]; then
-        echo "Homepage: $X_HOMEPAGE\n" >> $1
+        echo "Homepage: $X_HOMEPAGE" >> $1
     fi
     if [ -n "$X_DESCRIPTION" ]; then
-        echo "Description: $X_DESCRIPTION\n" >> $1
+        echo "Description: $X_DESCRIPTION" >> $1
     fi
 }
 
