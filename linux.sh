@@ -38,6 +38,30 @@ function make_init
     mkdir -p "$X_SOURCE_PATH/release"
     mkdir -p "$X_SOURCE_PATH/release/$X_BUILD_NAME"
     
+    # get DEBIAN version
+
+    X_DEBIAN_VERSION=$(cat /etc/debian_version)
+    
+    if      [[ $X_DEBIAN_VERSION == *"squeeze"* ]]; then
+        X_DEBIAN_VERSION="6"
+    elif    [[ $X_DEBIAN_VERSION == *"wheezy"* ]]; then
+        X_DEBIAN_VERSION="7"
+    elif    [[ $X_DEBIAN_VERSION == *"jessie"* ]]; then
+        X_DEBIAN_VERSION="8"
+    elif    [[ $X_DEBIAN_VERSION == *"jessie"* ]]; then
+        X_DEBIAN_VERSION="6"
+    elif    [[ $X_DEBIAN_VERSION == *"stretch"* ]]; then
+        X_DEBIAN_VERSION="9"
+    elif    [[ $X_DEBIAN_VERSION == *"buster"* ]]; then
+        X_DEBIAN_VERSION="10"
+    elif    [[ $X_DEBIAN_VERSION == *"bullseye"* ]]; then
+        X_DEBIAN_VERSION="11"
+    else 
+        X_DEBIAN_VERSION="5"
+    fi
+    
+    export X_DEBIAN_VERSION
+    
     cp -f $X_SOURCE_PATH/build_tools/build.pri                  $X_SOURCE_PATH/
 }
 
