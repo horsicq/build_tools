@@ -42,6 +42,8 @@ function make_init
 
     X_DEBIAN_VERSION=$(cat /etc/debian_version)
     
+    echo "$X_DEBIAN_VERSION"
+    
     if      [[ $X_DEBIAN_VERSION == *"squeeze"* ]]; then
         X_DEBIAN_VERSION="6"
     elif    [[ $X_DEBIAN_VERSION == *"wheezy"* ]]; then
@@ -59,6 +61,8 @@ function make_init
     else 
         X_DEBIAN_VERSION="5"
     fi
+    
+    echo "$X_DEBIAN_VERSION"
     
     export X_DEBIAN_VERSION
     
