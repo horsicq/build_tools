@@ -40,7 +40,7 @@ function make_init
     
     # get DEBIAN version
 
-    X_DEBIAN_VERSION=$(cat /etc/debian_version)
+    X_DEBIAN_VERSION=$(cat /etc/debian_version | awk -F'.' '{ print $1 }')
     
     echo "$X_DEBIAN_VERSION"
     
@@ -58,8 +58,6 @@ function make_init
         X_DEBIAN_VERSION="10"
     elif    [[ $X_DEBIAN_VERSION == *"bullseye"* ]]; then
         X_DEBIAN_VERSION="11"
-    else 
-        X_DEBIAN_VERSION="5"
     fi
     
     echo "$X_DEBIAN_VERSION"
