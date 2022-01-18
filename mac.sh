@@ -105,6 +105,13 @@ function deploy_qt_sign
     codesign -f -v -s "$X_PRIVATE_CERT_APP" -o runtime $X_SOURCE_PATH/release/${X_BUILD_NAME}/$1.app/Contents/MacOS/$1
 }
 
+function deploy_qt_sign_disable_protection
+{
+    "$X_QT_INSTALL_BINS/macdeployqt" $X_SOURCE_PATH/release/${X_BUILD_NAME}/$1.app
+    codesign --deep -f -v -s "$X_PRIVATE_CERT_APP" --entitlements $X_SOURCE_PATH/build_tools/disable_protection.plist -o runtime $X_SOURCE_PATH/release/${X_BUILD_NAME}/$1.app/Contents/MacOS/$1
+    codesign -f -v -s "$X_PRIVATE_CERT_APP" --entitlements $X_SOURCE_PATH/build_tools/disable_protection.plist -o runtime $X_SOURCE_PATH/release/${X_BUILD_NAME}/$1.app/Contents/MacOS/$1
+}
+
 function deploy_qt_library
 {
     mkdir $X_SOURCE_PATH/release/$X_BUILD_NAME/$2.app/Contents/Frameworks
