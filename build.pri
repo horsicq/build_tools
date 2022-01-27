@@ -6,16 +6,28 @@ CONFIG(debug, debug|release) {
 }
 
 win32-g++* {
+    QMAKE_CFLAGS  += -Wno-missing-field-initializers
+    QMAKE_CFLAGS  += -Werror=format-security
+    QMAKE_CFLAGS  += -Wno-unused-parameter
     QMAKE_CXXFLAGS += -Wno-missing-field-initializers
     QMAKE_CXXFLAGS += -Werror=format-security
+    QMAKE_CXXFLAGS += -Wno-unused-parameter
 }
 unix:!macx {
+    QMAKE_CFLAGS  += -Wno-missing-field-initializers
+    QMAKE_CFLAGS  += -Werror=format-security
+    QMAKE_CFLAGS  += -Wno-unused-parameter
     QMAKE_CXXFLAGS += -Wno-missing-field-initializers
     QMAKE_CXXFLAGS += -Werror=format-security
+    QMAKE_CXXFLAGS += -Wno-unused-parameter
 }
 unix:macx {
+    QMAKE_CFLAGS  += -Wno-missing-field-initializers
+    QMAKE_CFLAGS  += -Werror=format-security
+    QMAKE_CFLAGS  += -Wno-unused-parameter
     QMAKE_CXXFLAGS += -Wno-missing-field-initializers
     QMAKE_CXXFLAGS += -Werror=format-security
+    QMAKE_CXXFLAGS += -Wno-unused-parameter
 }
 
 !contains(QMAKE_TARGET.arch, x86_64) {
