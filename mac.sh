@@ -27,7 +27,7 @@ function make_build
         make clean
     fi
 
-    $QMAKE_PATH "$1" -spec $X_QMAKE_SPEC CONFIG+=x86_64
+    $QMAKE_PATH "$1" -spec $X_QMAKE_SPEC CONFIG+=x86_64 CONFIG+=release
     make -f Makefile
 }
 
