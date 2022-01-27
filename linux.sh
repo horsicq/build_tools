@@ -81,6 +81,7 @@ function make_translate
 {
     "$X_QT_INSTALL_BINS/lupdate" $1
     "$X_QT_INSTALL_BINS/lrelease" $1
+    # TODO copy
 }
 
 function make_release
