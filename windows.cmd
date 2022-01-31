@@ -85,6 +85,7 @@ goto exit
 :deploy_qt
     %X_QT_INSTALL_BINS%\windeployqt.exe %X_SOURCE_PATH%\release\%X_BUILD_NAME%\%~1
     del %X_SOURCE_PATH%\release\%X_BUILD_NAME%\%~1\vc_redist.x64.exe
+    del %X_SOURCE_PATH%\release\%X_BUILD_NAME%\%~1\vc_redist.x86.exe
     goto:eof
    
 :deploy_qt_library
