@@ -34,21 +34,23 @@ SQLite tools: https://www.sqlite.org/2018/sqlite-tools-win32-x86-3240000.zip
 
 WDK 7.1.0 (for Windows XP drivers): https://www.microsoft.com/download/confirmation.aspx?id=11800
 
-Install Qt 5.15.1 for Linux https://www.qt.io/download (Downloads for open source users)
+WDK 11 (for Windows 7-11 drivers): https://go.microsoft.com/fwlink/?linkid=2166289
+
+Install Qt 5.15.2 for Linux https://www.qt.io/download (Downloads for open source users)
 
 - Desktop gcc 64-bit
 - Qt Script
 
 ![alt text](https://github.com/horsicq/build_tools/blob/master/images/Linux_Qt5_15_1.png "Qt 5.15.1")
 
-Install Qt 5.15.1 for OSX https://www.qt.io/download (Downloads for open source users)
+Install Qt 5.15.2 for OSX https://www.qt.io/download (Downloads for open source users)
 
 - macOS
 - Qt Script
 
 ![alt text](https://github.com/horsicq/build_tools/blob/master/images/OSX_Qt5_15_1.png "Qt 5.15.1")
 
-Install Qt 5.15.1 for Windows https://www.qt.io/download (Downloads for open source users)
+Install Qt 5.15.2 for Windows https://www.qt.io/download (Downloads for open source users)
 
 - MSVC 2019 32-bit
 - MSVC 2019 64-bit
