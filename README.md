@@ -36,6 +36,8 @@ WDK 7.1.0 (for Windows XP drivers): https://www.microsoft.com/download/confirmat
 
 WDK 11 (for Windows 7-11 drivers): https://go.microsoft.com/fwlink/?linkid=2166289
 
+Windows SDK: https://go.microsoft.com/fwlink/?linkid=2173743
+
 Install Qt 5.15.2 for Linux https://www.qt.io/download (Downloads for open source users)
 
 - Desktop gcc 64-bit
