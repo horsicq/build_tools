@@ -18,7 +18,7 @@ function make_init
     mkdir -p "$X_SOURCE_PATH/release"
     mkdir -p "$X_SOURCE_PATH/release/$X_BUILD_NAME"
     
-    cp -f $X_SOURCE_PATH/build_tools/build.pri                  $X_SOURCE_PATH/
+    cp -f $X_SOURCE_PATH/build_tools/build.pri $X_SOURCE_PATH/
 }
 
 function make_build
