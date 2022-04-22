@@ -58,6 +58,8 @@ function make_init
         X_DEBIAN_VERSION="10"
     elif    [[ $X_DEBIAN_VERSION == *"bullseye"* ]]; then
         X_DEBIAN_VERSION="11"
+    elif    [[ $X_DEBIAN_VERSION == *"bookworm"* ]]; then
+        X_DEBIAN_VERSION="12"
     fi
     
     echo "$X_DEBIAN_VERSION"
