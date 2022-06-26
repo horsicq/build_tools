@@ -12,11 +12,11 @@ Inno Setup: https://jrsoftware.org/isdl.php
 
 (Linux)Qt 5.6.3(x64): https://download.qt.io/new_archive/qt/5.6/5.6.3/qt-opensource-linux-x64-5.6.3.run
 
-(Linux)Qt 5.9-5.15(x64): https://www.qt.io/download
+(Linux)Qt 5.15.2(x64): https://www.qt.io/download
 
-(OSX)Qt 5.6.3(x64): https://download.qt.io/new_archive/qt/5.6/5.6.3/qt-opensource-mac-x64-clang-5.6.3.dmg
+(macOS)Qt 5.6.3(x64): https://download.qt.io/new_archive/qt/5.6/5.6.3/qt-opensource-mac-x64-clang-5.6.3.dmg
 
-(OSX)Qt 5.9-5.15(x64): https://www.qt.io/download
+(macOS)Qt 5.15.2(x64): https://www.qt.io/download
 
 (Windows)Qt 5.6.2 for VS2013(x86): https://download.qt.io/new_archive/qt/5.6/5.6.2/qt-opensource-windows-x86-msvc2013-5.6.2.exe
 
@@ -26,7 +26,7 @@ Inno Setup: https://jrsoftware.org/isdl.php
 
 (Windows)Qt 5.6.3 for VS2013(x64): https://download.qt.io/new_archive/qt/5.6/5.6.3/qt-opensource-windows-x86-msvc2013_64-5.6.3.exe
 
-(Windows)Qt 5.9-5.15(x86-x64): https://www.qt.io/download
+(Windows)Qt 5.15.2(x86-x64): https://www.qt.io/download
 
 UPX: https://github.com/upx/upx/releases
 
