@@ -102,7 +102,6 @@ goto exit
 :deploy_vc_redist
     echo %VisualStudioVersion%
     if "%VisualStudioVersion%" == "12.0" (
-        echo "Test1"
         copy "%VCINSTALLDIR%\redist\x86\Microsoft.VC120.CRT\msvcp120.dll" %X_SOURCE_PATH%\release\%X_BUILD_NAME%\
         copy "%VCINSTALLDIR%\redist\x86\Microsoft.VC120.CRT\msvcr120.dll" %X_SOURCE_PATH%\release\%X_BUILD_NAME%\
     )
@@ -133,6 +132,22 @@ goto exit
     )
     rem TODO more
     
+    goto:eof
+    
+:deploy_openssl
+    if "%VisualStudioVersion%" == "12.0" (
+        xcopy %X_SOURCE_PATH%\build_tools\openssl\winxp_x86\libeay32.dll %X_SOURCE_PATH%\release\%X_BUILD_NAME%\ /Y
+        xcopy %X_SOURCE_PATH%\build_tools\openssl\winxp_x86\ssleay32.dll %X_SOURCE_PATH%\release\%X_BUILD_NAME%\ /Y
+    )
+    if "%VisualStudioVersion%" == "16.0" (
+        if "%VSCMD_ARG_TGT_ARCH%" == "x64" (
+            xcopy %X_SOURCE_PATH%\build_tools\openssl\win_x64\libcrypto-1_1-x64.dll %X_SOURCE_PATH%\release\%X_BUILD_NAME%\ /Y
+            xcopy %X_SOURCE_PATH%\build_tools\openssl\win_x64\libssl-1_1-x64.dll %X_SOURCE_PATH%\release\%X_BUILD_NAME%\ /Y
+        } else {
+            xcopy %X_SOURCE_PATH%\build_tools\openssl\win_x86\libcrypto-1_1.dll %X_SOURCE_PATH%\release\%X_BUILD_NAME%\ /Y
+            xcopy %X_SOURCE_PATH%\build_tools\openssl\win_x86\libssl-1_1.dll %X_SOURCE_PATH%\release\%X_BUILD_NAME%\ /Y
+        }
+    )
     goto:eof
     
 :make_release
