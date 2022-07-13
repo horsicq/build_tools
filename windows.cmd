@@ -135,19 +135,26 @@ goto exit
     goto:eof
     
 :deploy_openssl
-    if "%VisualStudioVersion%" == "12.0" (
-        xcopy %X_SOURCE_PATH%\build_tools\openssl\winxp_x86\libeay32.dll %X_SOURCE_PATH%\release\%X_BUILD_NAME%\ /Y
-        xcopy %X_SOURCE_PATH%\build_tools\openssl\winxp_x86\ssleay32.dll %X_SOURCE_PATH%\release\%X_BUILD_NAME%\ /Y
-    )
-    if "%VisualStudioVersion%" == "16.0" (
-        if "%VSCMD_ARG_TGT_ARCH%" == "x64" (
-            xcopy %X_SOURCE_PATH%\build_tools\openssl\win_x64\libcrypto-1_1-x64.dll %X_SOURCE_PATH%\release\%X_BUILD_NAME%\ /Y
-            xcopy %X_SOURCE_PATH%\build_tools\openssl\win_x64\libssl-1_1-x64.dll %X_SOURCE_PATH%\release\%X_BUILD_NAME%\ /Y
-        } else {
-            xcopy %X_SOURCE_PATH%\build_tools\openssl\win_x86\libcrypto-1_1.dll %X_SOURCE_PATH%\release\%X_BUILD_NAME%\ /Y
-            xcopy %X_SOURCE_PATH%\build_tools\openssl\win_x86\libssl-1_1.dll %X_SOURCE_PATH%\release\%X_BUILD_NAME%\ /Y
-        }
-    )
+    IF "%VisualStudioVersion%" == "12.0" goto deploy_openssl_winxp
+    IF "%VisualStudioVersion%" == "16.0" goto deploy_openssl_win
+    goto deploy_openssl_exit
+:deploy_openssl_winxp
+    xcopy %X_SOURCE_PATH%\build_tools\openssl\winxp_x86\libeay32.dll %X_SOURCE_PATH%\release\%X_BUILD_NAME%\ /Y
+    xcopy %X_SOURCE_PATH%\build_tools\openssl\winxp_x86\ssleay32.dll %X_SOURCE_PATH%\release\%X_BUILD_NAME%\ /Y
+    goto deploy_openssl_exit
+:deploy_openssl_win
+    if "%VSCMD_ARG_TGT_ARCH%" == "x86" goto deploy_openssl_win_x86
+    if "%VSCMD_ARG_TGT_ARCH%" == "x64" goto deploy_openssl_win_x64
+    goto deploy_openssl_exit
+:deploy_openssl_win_x86
+    xcopy %X_SOURCE_PATH%\build_tools\openssl\win_x86\libcrypto-1_1.dll %X_SOURCE_PATH%\release\%X_BUILD_NAME%\ /Y
+    xcopy %X_SOURCE_PATH%\build_tools\openssl\win_x86\libssl-1_1.dll %X_SOURCE_PATH%\release\%X_BUILD_NAME%\ /Y
+    goto deploy_openssl_exit
+:deploy_openssl_win_x64
+    xcopy %X_SOURCE_PATH%\build_tools\openssl\win_x64\libcrypto-1_1-x64.dll %X_SOURCE_PATH%\release\%X_BUILD_NAME%\ /Y
+    xcopy %X_SOURCE_PATH%\build_tools\openssl\win_x64\libssl-1_1-x64.dll %X_SOURCE_PATH%\release\%X_BUILD_NAME%\ /Y
+    goto deploy_openssl_exit
+:deploy_openssl_exit
     goto:eof
     
 :make_release
