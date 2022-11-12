@@ -39,6 +39,7 @@ function make_init
     mkdir -p "$X_SOURCE_PATH/release/$X_BUILD_NAME"
     
     # get DEBIAN version
+    # TODO other Linuxes
 
     X_DEBIAN_VERSION=$(cat /etc/debian_version | awk -F'.' '{ print $1 }')
     
