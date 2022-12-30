@@ -14,13 +14,17 @@ function make_init
     export X_REVISION=$(date "+%Y%m%d")
 
     # TODO more (arm8)
-    X_ARCHITECTURE="i386"
+    X_ARCHITECTURE=$X_UNAME
     if [[ $X_UNAME == *"x86_64"* ]]; then
         X_ARCHITECTURE="amd64"
     fi
     
     if [[ $X_UNAME == *"armv7l"* ]]; then
         X_ARCHITECTURE="armhf"
+    fi
+    
+    if [[ $X_UNAME == *"aarch64"* ]]; then
+        X_ARCHITECTURE="amd64"
     fi
     
     export X_ARCHITECTURE
