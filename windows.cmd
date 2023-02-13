@@ -10,15 +10,17 @@ goto exit
         echo "Cannot find file: %~1"
     )
     goto:eof
-    
 :make_init
     echo "init"
+    set X_ARCHITECTURE=x86
 :msvc_env
     IF [%VSVARS_PATH%] == [] goto mingw_env
     call %VSVARS_PATH%
     set X_MAKE=nmake
+    set X_ARCHITECTURE=%Platform%
     goto qmake_env
 :mingw_env
+    rem TODO platform
     IF [%MINGWVARS_PATH%] == [] goto qmake_env
     call %MINGWVARS_PATH%
     set X_MAKE=mingw32-make
@@ -159,7 +161,7 @@ goto exit
     
 :make_release
     cd %X_SOURCE_PATH%\release
-    set X_ZIP_NAME=%X_BUILD_NAME%_%X_BUILD_PREFIX%_portable_%X_RELEASE_VERSION%
+    set X_ZIP_NAME=%X_BUILD_NAME%_%X_BUILD_PREFIX%_portable_%X_RELEASE_VERSION%_%X_ARCHITECTURE%
     if exist %X_ZIP_NAME%.zip del %X_ZIP_NAME%.zip
     cd %X_SOURCE_PATH%\release\%X_BUILD_NAME%\
     

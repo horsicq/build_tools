@@ -24,7 +24,7 @@ function make_init
     fi
     
     if [[ $X_UNAME == *"aarch64"* ]]; then
-        X_ARCHITECTURE="amd64"
+        X_ARCHITECTURE="arm64"
     fi
     
     export X_ARCHITECTURE
