@@ -10,6 +10,7 @@ function check_file
 
 function make_init
 {
+    export X_ARCHITECTURE = x86_64
     export X_QT_VERSION=$($QMAKE_PATH -query QT_VERSION)
     export X_QT_INSTALL_BINS=$($QMAKE_PATH -query QT_INSTALL_BINS)
     export X_QT_INSTALL_PLUGINS=$($QMAKE_PATH -query QT_INSTALL_PLUGINS)
@@ -50,20 +51,20 @@ function make_release
     #fi
     
     cd $X_SOURCE_PATH/release/
-    rm -rf $X_SOURCE_PATH/release/${X_BUILD_NAME}_portable_${X_RELEASE_VERSION}.zip
-    /usr/bin/ditto -c -k --sequesterRsrc --keepParent $X_SOURCE_PATH/release/${X_BUILD_NAME}/$1.app $X_SOURCE_PATH/release/${X_BUILD_NAME}_portable_${X_RELEASE_VERSION}.zip
+    rm -rf $X_SOURCE_PATH/release/${X_BUILD_NAME}_portable_${X_RELEASE_VERSION}_${X_ARCHITECTURE}.zip
+    /usr/bin/ditto -c -k --sequesterRsrc --keepParent $X_SOURCE_PATH/release/${X_BUILD_NAME}/$1.app $X_SOURCE_PATH/release/${X_BUILD_NAME}_portable_${X_RELEASE_VERSION}_${X_ARCHITECTURE}.zip
     
     if [ -n "$X_PRIVATE_CERT_INSTALL" ]; then
         pkgbuild --analyze --root $X_SOURCE_PATH/release/${X_BUILD_NAME}/$1.app $X_SOURCE_PATH/release/${X_BUILD_NAME}/$1.plist
-        pkgbuild --root $X_SOURCE_PATH/release/${X_BUILD_NAME}/$1.app --component-plist $X_SOURCE_PATH/release/${X_BUILD_NAME}/$1.plist  $X_SOURCE_PATH/release/${X_BUILD_NAME}_${X_RELEASE_VERSION}.pkg --sign "$X_PRIVATE_CERT_INSTALL" --identifier $X_PRIVATE_NOTARIZE_BUNDLE --install-location /Applications/$1.app
+        pkgbuild --root $X_SOURCE_PATH/release/${X_BUILD_NAME}/$1.app --component-plist $X_SOURCE_PATH/release/${X_BUILD_NAME}/$1.plist  $X_SOURCE_PATH/release/${X_BUILD_NAME}_${X_RELEASE_VERSION}_${X_ARCHITECTURE}.pkg --sign "$X_PRIVATE_CERT_INSTALL" --identifier $X_PRIVATE_NOTARIZE_BUNDLE --install-location /Applications/$1.app
     fi
     
     if [ -n "$X_PRIVATE_NOTARIZE_PWD" ]; then
-        xcrun altool --notarize-app -f $X_SOURCE_PATH/release/${X_BUILD_NAME}_portable_${X_RELEASE_VERSION}.zip --primary-bundle $X_PRIVATE_NOTARIZE_BUNDLE -u ${X_PRIVATE_NOTARIZE_LOGIN} -p ${X_PRIVATE_NOTARIZE_PWD}
-        xcrun altool --notarize-app -f $X_SOURCE_PATH/release/${X_BUILD_NAME}_${X_RELEASE_VERSION}.pkg --primary-bundle $X_PRIVATE_NOTARIZE_BUNDLE -u ${X_PRIVATE_NOTARIZE_LOGIN} -p ${X_PRIVATE_NOTARIZE_PWD}
+        xcrun altool --notarize-app -f $X_SOURCE_PATH/release/${X_BUILD_NAME}_portable_${X_RELEASE_VERSION}_${X_ARCHITECTURE}.zip --primary-bundle $X_PRIVATE_NOTARIZE_BUNDLE -u ${X_PRIVATE_NOTARIZE_LOGIN} -p ${X_PRIVATE_NOTARIZE_PWD}
+        xcrun altool --notarize-app -f $X_SOURCE_PATH/release/${X_BUILD_NAME}_${X_RELEASE_VERSION}_${X_ARCHITECTURE}.pkg --primary-bundle $X_PRIVATE_NOTARIZE_BUNDLE -u ${X_PRIVATE_NOTARIZE_LOGIN} -p ${X_PRIVATE_NOTARIZE_PWD}
     fi
     
-    zip -d $X_SOURCE_PATH/release/${X_BUILD_NAME}_portable_${X_RELEASE_VERSION}.zip __MACOSX/\*
+    zip -d $X_SOURCE_PATH/release/${X_BUILD_NAME}_portable_${X_RELEASE_VERSION}_${X_ARCHITECTURE}.zip __MACOSX/\*
 
     cd $X_SOURCE_PATH
 }
