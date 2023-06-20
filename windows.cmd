@@ -113,6 +113,12 @@ goto exit
         copy "%VCToolsRedistDir%\%Platform%\Microsoft.VC142.CRT\msvcp140_1.dll" %X_SOURCE_PATH%\release\%X_BUILD_NAME%\
         copy "%VCToolsRedistDir%\%Platform%\Microsoft.VC142.CRT\vcruntime140_1.dll" %X_SOURCE_PATH%\release\%X_BUILD_NAME%\
     )
+    if "%VisualStudioVersion%" == "17.0" (
+        copy "%VCToolsRedistDir%\%Platform%\Microsoft.VC143.CRT\msvcp140.dll" %X_SOURCE_PATH%\release\%X_BUILD_NAME%\
+        copy "%VCToolsRedistDir%\%Platform%\Microsoft.VC143.CRT\vcruntime140.dll" %X_SOURCE_PATH%\release\%X_BUILD_NAME%\
+        copy "%VCToolsRedistDir%\%Platform%\Microsoft.VC143.CRT\msvcp140_1.dll" %X_SOURCE_PATH%\release\%X_BUILD_NAME%\
+        copy "%VCToolsRedistDir%\%Platform%\Microsoft.VC143.CRT\msvcp140_2.dll" %X_SOURCE_PATH%\release\%X_BUILD_NAME%\
+    )
     
     goto:eof
     
