@@ -133,6 +133,12 @@ goto exit
         copy "%VCToolsRedistDir%\%Platform%\Microsoft.VC142.CRT\msvcp140_1.dll" %X_SOURCE_PATH%\release\%X_BUILD_NAME%\
         copy "%VCToolsRedistDir%\%Platform%\Microsoft.VC142.CRT\vcruntime140_1.dll" %X_SOURCE_PATH%\release\%X_BUILD_NAME%\
     )
+	if "%VisualStudioVersion%" == "17.0" (
+        copy "%VCToolsRedistDir%\%Platform%\Microsoft.VC143.CRT\msvcp140.dll" %X_SOURCE_PATH%\release\%X_BUILD_NAME%\
+        copy "%VCToolsRedistDir%\%Platform%\Microsoft.VC143.CRT\vcruntime140.dll" %X_SOURCE_PATH%\release\%X_BUILD_NAME%\
+        copy "%VCToolsRedistDir%\%Platform%\Microsoft.VC143.CRT\msvcp140_1.dll" %X_SOURCE_PATH%\release\%X_BUILD_NAME%\
+        copy "%VCToolsRedistDir%\%Platform%\Microsoft.VC143.CRT\msvcp140_2.dll" %X_SOURCE_PATH%\release\%X_BUILD_NAME%\
+    )
     if "%X_QMAKE_SPEC%" == "win32-g++" (
         copy "%X_QT_INSTALL_BINS%\libgcc_s_dw2-1.dll" %X_SOURCE_PATH%\release\%X_BUILD_NAME%\
         copy "%X_QT_INSTALL_BINS%\libstdc++-6.dll" %X_SOURCE_PATH%\release\%X_BUILD_NAME%\
