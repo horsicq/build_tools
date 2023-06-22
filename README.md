@@ -6,6 +6,8 @@ Visual Studio Community 2017 (version 15.9): https://my.visualstudio.com/Downloa
 
 Visual Studio Community 2019 (version 16.7): https://my.visualstudio.com/downloads (Login with GitHub)
 
+Visual Studio Community 2022: https://my.visualstudio.com/downloads (Login with GitHub)
+
 7-Zip: https://www.7-zip.org/
 
 Inno Setup: https://jrsoftware.org/isdl.php
