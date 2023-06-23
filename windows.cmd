@@ -10,6 +10,7 @@ goto exit
         echo "Cannot find file: %~1"
     )
     goto:eof
+
 :make_init
     echo "init"
     set X_ARCHITECTURE=x86
