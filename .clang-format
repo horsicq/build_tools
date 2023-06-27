@@ -16,10 +16,9 @@ AllowAllParametersOfDeclarationOnNextLine: true
 AllowShortEnumsOnASingleLine: false
 AllowShortBlocksOnASingleLine: Never
 AllowShortCaseLabelsOnASingleLine: true
-AllowShortIfStatementsOnASingleLine: AllIfsAndElse
 AllowShortFunctionsOnASingleLine: None
 AllowShortLambdasOnASingleLine: All
-AllowShortIfStatementsOnASingleLine: WithoutElse
+AllowShortIfStatementsOnASingleLine: AllIfsAndElse
 AllowShortLoopsOnASingleLine: true
 AlwaysBreakAfterDefinitionReturnType: None
 AlwaysBreakAfterReturnType: None
