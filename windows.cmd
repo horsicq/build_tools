@@ -18,6 +18,7 @@ goto exit
     IF [%VSVARS_PATH%] == [] goto mingw_env
     call %VSVARS_PATH%
     set X_MAKE=nmake
+    IF [%Platform%] == [] goto qmake_env
     set X_ARCHITECTURE=%Platform%
     goto qmake_env
 :mingw_env
