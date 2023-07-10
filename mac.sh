@@ -10,7 +10,7 @@ function check_file
 
 function make_init
 {
-    export X_ARCHITECTURE = x86_64
+    export X_ARCHITECTURE="x86_64"
     export X_QT_VERSION=$($QMAKE_PATH -query QT_VERSION)
     export X_QT_INSTALL_BINS=$($QMAKE_PATH -query QT_INSTALL_BINS)
     export X_QT_INSTALL_PLUGINS=$($QMAKE_PATH -query QT_INSTALL_PLUGINS)
