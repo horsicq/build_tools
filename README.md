@@ -4,9 +4,7 @@ Visual Studio Community 2013 with Update 5: https://my.visualstudio.com/Download
 
 Visual Studio Community 2017 (version 15.9): https://my.visualstudio.com/Downloads?q=visual%20studio%202017&wt.mc_id=o~msft~vscom~older-downloads (Login with GitHub)
 
-Visual Studio Community 2019 (version 16.7): https://my.visualstudio.com/downloads (Login with GitHub)
-
-Visual Studio Community 2022: https://my.visualstudio.com/downloads (Login with GitHub)
+Visual Studio Community 2019: https://my.visualstudio.com/downloads (Login with GitHub)
 
 7-Zip: https://www.7-zip.org/
 
