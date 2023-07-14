@@ -17,8 +17,10 @@ function make_init
     export X_QT_INSTALL_LIBS=$($QMAKE_PATH -query QT_INSTALL_LIBS)
     export X_QMAKE_SPEC=$($QMAKE_PATH -query QMAKE_SPEC)
     
-    if [ "$X_QT_VERSION" > "6.0.0" ]; then
-    	export X_ARCHITECTURE=$(uname -m)
+    if [[ "$X_QT_VERSION" == "5.15.2" ]]; then
+    	export X_ARCHITECTURE="x86_64"
+    else
+        export X_ARCHITECTURE=$(uname -m)
 	fi
     
     mkdir -p "$X_SOURCE_PATH/release"
@@ -67,8 +69,8 @@ function make_release
     if [ -n "$X_PRIVATE_NOTARIZE_PWD" ]; then
         #xcrun altool --notarize-app -f $X_SOURCE_PATH/release/${X_BUILD_NAME}_portable_${X_RELEASE_VERSION}_${X_ARCHITECTURE}.zip --primary-bundle $X_PRIVATE_NOTARIZE_BUNDLE -u ${X_PRIVATE_NOTARIZE_LOGIN} -p ${X_PRIVATE_NOTARIZE_PWD}
         #xcrun altool --notarize-app -f $X_SOURCE_PATH/release/${X_BUILD_NAME}_${X_RELEASE_VERSION}_${X_ARCHITECTURE}.pkg --primary-bundle $X_PRIVATE_NOTARIZE_BUNDLE -u ${X_PRIVATE_NOTARIZE_LOGIN} -p ${X_PRIVATE_NOTARIZE_PWD}
-        xcrun notarytool submit $X_SOURCE_PATH/release/${X_BUILD_NAME}_portable_${X_RELEASE_VERSION}_${X_ARCHITECTURE}.zip --apple-id ${X_PRIVATE_NOTARIZE_LOGIN}  --password ${X_PRIVATE_NOTARIZE_PWD} --teamid ${X_PRIVATE_NOTARIZE_TEAMID} --wait
-        xcrun notarytool submit $X_SOURCE_PATH/release/${X_BUILD_NAME}_${X_RELEASE_VERSION}_${X_ARCHITECTURE}.pkg --apple-id ${X_PRIVATE_NOTARIZE_LOGIN}  --password ${X_PRIVATE_NOTARIZE_PWD} --teamid ${X_PRIVATE_NOTARIZE_TEAMID} --wait
+        xcrun notarytool submit $X_SOURCE_PATH/release/${X_BUILD_NAME}_portable_${X_RELEASE_VERSION}_${X_ARCHITECTURE}.zip --apple-id ${X_PRIVATE_NOTARIZE_LOGIN}  --password ${X_PRIVATE_NOTARIZE_PWD} --team-id ${X_PRIVATE_NOTARIZE_TEAMID} --wait
+        xcrun notarytool submit $X_SOURCE_PATH/release/${X_BUILD_NAME}_${X_RELEASE_VERSION}_${X_ARCHITECTURE}.pkg --apple-id ${X_PRIVATE_NOTARIZE_LOGIN}  --password ${X_PRIVATE_NOTARIZE_PWD} --team-id ${X_PRIVATE_NOTARIZE_TEAMID} --wait
     fi
     
     zip -d $X_SOURCE_PATH/release/${X_BUILD_NAME}_portable_${X_RELEASE_VERSION}_${X_ARCHITECTURE}.zip __MACOSX/\*
