@@ -17,10 +17,11 @@ function make_init
     export X_QT_INSTALL_LIBS=$($QMAKE_PATH -query QT_INSTALL_LIBS)
     export X_QMAKE_SPEC=$($QMAKE_PATH -query QMAKE_SPEC)
     
+    # TIDO!!!
     if [[ "$X_QT_VERSION" == "5.15.2" ]]; then
     	export X_ARCHITECTURE="x86_64"
     else
-        export X_ARCHITECTURE=$(uname -m)
+        export X_ARCHITECTURE=$(uname -m) # Qt 6.X.X
 	fi
     
     mkdir -p "$X_SOURCE_PATH/release"
