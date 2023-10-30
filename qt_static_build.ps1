@@ -61,7 +61,7 @@ param(
     $QtSrcUrl = "https://download.qt.io/official_releases/qt/5.15/5.15.2/single/qt-everywhere-src-5.15.2.zip",
     $QtStaticDir = "C:\Qt\Static", # NO TRAILING SLASH
     $QtVersion = "5.15.2", #If you change this, you'll need to change the URL above to download as well...
-    $MingwDir = "",
+    $MingwDir = "C:\Qt\Tools\mingw810_32",
     [switch]$NoPause = $false
 )
 
@@ -155,7 +155,7 @@ DEFINES += QT_STATIC_BUILD
 
     # Configure, compile and install Qt.
     Push-Location $QtSrcDir
-    cmd /c "configure.bat -static -release -platform win32-g++ -opensource -confirm-license -prefix $QtDir -qt-zlib -qt-libpng -qt-webp -qt-libjpeg -qt-freetype  -no-opengl -skip qt3d -skip qtactiveqt -skip qtandroidextras -skip qtcharts -skip qtconnectivity -skip qtdatavis3d -skip qtdeclarative -skip qtdoc -skip qtgamepad -skip qtlocation -skip qtlottie -skip qtmacextras -skip qtmultimedia -skip qtnetworkauth -skip qtpurchasing -skip qtquick3d -skip qtquickcontrols -skip qtquickcontrols2 -skip qtquicktimeline -skip qtremoteobjects -skip qtscript -skip qtsensors -skip qtspeech -skip qtsvg -skip qtwayland -skip qtwebglplugin -skip qtwebview -skip webengine -make libs -nomake tools -nomake examples -nomake tests"
+    cmd /c "configure.bat -static -release -platform win32-g++ -opensource -confirm-license -prefix $QtDir -qt-zlib -qt-libpng -qt-webp -qt-libjpeg -qt-freetype  -no-opengl -skip qtactiveqt -skip qtandroidextras -skip qtcharts -skip qtconnectivity -skip qtdatavis3d -skip qtdeclarative -skip qtdoc -skip qtgamepad -skip qtlocation -skip qtlottie -skip qtmacextras -skip qtmultimedia -skip qtnetworkauth -skip qtpurchasing -skip qtquick3d -skip qtquickcontrols -skip qtquickcontrols2 -skip qtquicktimeline -skip qtremoteobjects -skip qtsensors -skip qtspeech -skip qtsvg -skip qtwayland -skip qtwebglplugin -skip qtwebview -skip webengine-make libs -nomake tools -nomake examples -nomake tests"
     mingw32-make #-k -j4
     mingw32-make install #-k install
     Pop-Location
