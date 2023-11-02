@@ -23,8 +23,8 @@ goto exit
     goto qmake_env
 :mingw_env
     rem TODO platform
-    IF [%MINGWVARS_PATH%] == [] goto qmake_env
-    call %MINGWVARS_PATH%
+    IF [%MINGW_PATH%] == [] goto qmake_env
+    set PATH=%MINGW_PATH%
     set X_MAKE=mingw32-make
     goto qmake_env
     set X_ERROR="TRUE"
