@@ -68,6 +68,8 @@ function make_release
         pkgbuild --analyze --root $X_SOURCE_PATH/release/${X_BUILD_NAME}/$1.app $X_SOURCE_PATH/release/${X_BUILD_NAME}/$1.plist
         pkgbuild --root $X_SOURCE_PATH/release/${X_BUILD_NAME}/$1.app --component-plist $X_SOURCE_PATH/release/${X_BUILD_NAME}/$1.plist  $X_SOURCE_PATH/release/${X_BUILD_NAME}_${X_RELEASE_VERSION}_${X_ARCHITECTURE}.pkg --sign "$X_PRIVATE_CERT_INSTALL" --identifier $X_PRIVATE_NOTARIZE_BUNDLE --install-location /Applications/$1.app
     fi
+
+    zip -d $X_SOURCE_PATH/release/${X_BUILD_NAME}_portable_${X_RELEASE_VERSION}_${X_ARCHITECTURE}.zip __MACOSX/\*
     
     if [ -n "$X_PRIVATE_NOTARIZE_PWD" ]; then
     	if [[ "$X_OS_VERSION" == "10.13.6" ]]; then
@@ -78,8 +80,6 @@ function make_release
             xcrun notarytool submit $X_SOURCE_PATH/release/${X_BUILD_NAME}_${X_RELEASE_VERSION}_${X_ARCHITECTURE}.pkg --apple-id ${X_PRIVATE_NOTARIZE_LOGIN}  --password ${X_PRIVATE_NOTARIZE_PWD} --team-id ${X_PRIVATE_NOTARIZE_TEAMID} --wait
         fi
     fi
-    
-    zip -d $X_SOURCE_PATH/release/${X_BUILD_NAME}_portable_${X_RELEASE_VERSION}_${X_ARCHITECTURE}.zip __MACOSX/\*
 
     cd $X_SOURCE_PATH
 }
