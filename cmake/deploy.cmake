@@ -1,3 +1,26 @@
+function(deploy_init)
+    #set(CPACK_SOURCE_GENERATOR "ZIP")
+    set(CPACK_INCLUDE_TOPLEVEL_DIRECTORY OFF)
+    set(CPACK_OUTPUT_FILE_PREFIX packages)
+    set(CPACK_RESOURCE_FILE_LICENSE ${PROJECT_SOURCE_DIR}/../LICENSE)
+    set(CPACK_RESOURCE_FILE_README ${PROJECT_SOURCE_DIR}/../README.md)
+
+    file (STRINGS ${PROJECT_SOURCE_DIR}/../release_version.txt CPACK_PACKAGE_VERSION)
+
+    message(STATUS ${CPACK_SYSTEM_NAME})
+
+    if(MSVC)
+        if(${MSVC_VERSION} EQUAL 1800)
+            set(CPACK_SYSTEM_NAME winxp)
+        endif()
+    endif()
+
+    include(CPack)
+    message(STATUS ${CPACK_SYSTEM_NAME})
+    message(STATUS ${CPACK_PACKAGE_FILE_NAME})
+    message(STATUS qt_version_${QT_VERSION_MAJOR})
+endfunction()
+
 function(deploy_msvc)
     if(MSVC)
         if(${MSVC_TOOLSET_VERSION} GREATER_EQUAL 142)
