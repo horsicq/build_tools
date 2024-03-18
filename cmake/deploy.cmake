@@ -1,4 +1,15 @@
+function(get_envs)
+    message(STATUS CMAKE_SYSTEM_PROCESSOR: ${CMAKE_SYSTEM_PROCESSOR})
+    if ("${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "x86_64")
+        set(X_PROJECT_ARCH "amd64" PARENT_SCOPE)
+    endif()
+    message(STATUS ${X_PROJECT_ARCH})
+    set(X_PROJECT_OSNAME "Ubuntu" PARENT_SCOPE)
+endfunction()
+
 function(deploy_init)
+    get_envs()
+
     #set(CPACK_SOURCE_GENERATOR "ZIP")
     set(CPACK_INCLUDE_TOPLEVEL_DIRECTORY OFF)
     set(CPACK_OUTPUT_FILE_PREFIX packages)
@@ -15,10 +26,13 @@ function(deploy_init)
         endif()
     endif()
 
+    set(CPACK_DEBIAN_PACKAGE_NAME "${CPACK_PACKAGE_NAME}_${CPACK_PACKAGE_VERSION}_${X_PROJECT_OSNAME}_${X_PROJECT_ARCH}")
+
     include(CPack)
     message(STATUS ${CPACK_SYSTEM_NAME})
     message(STATUS ${CPACK_PACKAGE_FILE_NAME})
     message(STATUS qt_version_${QT_VERSION_MAJOR})
+    message(STATUS "CPACK_DEBIAN_PACKAGE_NAME: ${CPACK_DEBIAN_PACKAGE_NAME}")
 endfunction()
 
 function(deploy_msvc)
