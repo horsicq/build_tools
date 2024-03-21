@@ -1,10 +1,25 @@
 function(get_envs)
+    set(X_PROJECT_ARCH "x86" PARENT_SCOPE)
     message(STATUS CMAKE_SYSTEM_PROCESSOR: ${CMAKE_SYSTEM_PROCESSOR})
     if ("${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "x86_64")
         set(X_PROJECT_ARCH "amd64" PARENT_SCOPE)
     endif()
+
     message(STATUS ${X_PROJECT_ARCH})
-    set(X_PROJECT_OSNAME "Ubuntu" PARENT_SCOPE)
+
+    if (WIN32)
+        if ("${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "x86_64")
+            set(X_PROJECT_OSNAME "win64" PARENT_SCOPE)
+        else()
+            set(X_PROJECT_OSNAME "win32" PARENT_SCOPE)
+        endif()
+
+        if(MSVC)
+            if(${MSVC_VERSION} EQUAL 1800)
+                set(X_PROJECT_OSNAME "winxp" PARENT_SCOPE)
+            endif()
+        endif()
+    endif()
 endfunction()
 
 function(deploy_init)
@@ -18,21 +33,18 @@ function(deploy_init)
 
     file (STRINGS "${PROJECT_SOURCE_DIR}/../release_version.txt" CPACK_PACKAGE_VERSION)
 
-    message(STATUS ${CPACK_SYSTEM_NAME})
-
-    if(MSVC)
-        if(${MSVC_VERSION} EQUAL 1800)
-            set(CPACK_SYSTEM_NAME winxp)
-        endif()
-    endif()
-
     set(CPACK_DEBIAN_PACKAGE_NAME "${CPACK_PACKAGE_NAME}_${CPACK_PACKAGE_VERSION}_${X_PROJECT_OSNAME}_${X_PROJECT_ARCH}")
+
+    if (WIN32)
+        set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}_${X_PROJECT_OSNAME}_portable_${CPACK_PACKAGE_VERSION}")
+    endif()
 
     include(CPack)
     message(STATUS ${CPACK_SYSTEM_NAME})
     message(STATUS ${CPACK_PACKAGE_FILE_NAME})
     message(STATUS qt_version_${QT_VERSION_MAJOR})
     message(STATUS "CPACK_DEBIAN_PACKAGE_NAME: ${CPACK_DEBIAN_PACKAGE_NAME}")
+    message(STATUS "CPACK_PACKAGE_FILE_NAME: ${CPACK_PACKAGE_FILE_NAME}")
 endfunction()
 
 function(deploy_msvc)
