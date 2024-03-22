@@ -20,6 +20,41 @@ function(get_envs)
             endif()
         endif()
     endif()
+    if (CMAKE_SYSTEM_NAME MATCHES "Linux")
+        execute_process (
+            COMMAND bash -c "grep -E '^(ID)=' /etc/os-release"
+            OUTPUT_VARIABLE X_OS_NAME
+        )
+        execute_process (
+            COMMAND bash -c "grep -E '^(VERSION_ID)=' /etc/os-release"
+            OUTPUT_VARIABLE X_OS_VERSION
+        )
+
+        set(X_PROJECT_OSNAME ${X_OS_NAME}_${X_OS_VERSION} PARENT_SCOPE)
+
+        if (EXISTS "/etc/debian_version")
+            file (STRINGS "/etc/debian_version" X_DEBIAN_VERSION PARENT_SCOPE)
+            message(STATUS ${X_DEBIAN_VERSION})
+            if (X_DEBIAN_VERSION MATCHES "squeeze")
+                set(X_DEBIAN_VERSION "6" PARENT_SCOPE)
+            elseif (X_DEBIAN_VERSION MATCHES "squeeze")
+                set(X_DEBIAN_VERSION "7" PARENT_SCOPE)
+            elseif (X_DEBIAN_VERSION MATCHES "squeeze")
+                set(X_DEBIAN_VERSION "8" PARENT_SCOPE)
+            elseif (X_DEBIAN_VERSION MATCHES "squeeze")
+                set(X_DEBIAN_VERSION "9" PARENT_SCOPE)
+            elseif (X_DEBIAN_VERSION MATCHES "squeeze")
+                set(X_DEBIAN_VERSION "10" PARENT_SCOPE)
+            elseif (X_DEBIAN_VERSION MATCHES "squeeze")
+                set(X_DEBIAN_VERSION "11" PARENT_SCOPE)
+            elseif (X_DEBIAN_VERSION MATCHES "bookworm")
+                set(X_DEBIAN_VERSION "12" PARENT_SCOPE)
+            else()
+                set(X_DEBIAN_VERSION "11" PARENT_SCOPE)
+            endif()
+            message(STATUS ${X_DEBIAN_VERSION})
+        endif()
+    endif()
 endfunction()
 
 function(deploy_init)
@@ -30,10 +65,11 @@ function(deploy_init)
     set(CPACK_OUTPUT_FILE_PREFIX packages)
     set(CPACK_RESOURCE_FILE_LICENSE "${PROJECT_SOURCE_DIR}/../LICENSE")
     set(CPACK_RESOURCE_FILE_README "${PROJECT_SOURCE_DIR}/../README.md")
-
     file (STRINGS "${PROJECT_SOURCE_DIR}/../release_version.txt" CPACK_PACKAGE_VERSION)
 
-    set(CPACK_DEBIAN_PACKAGE_NAME "${CPACK_PACKAGE_NAME}_${CPACK_PACKAGE_VERSION}_${X_PROJECT_OSNAME}_${X_PROJECT_ARCH}")
+    if (CMAKE_SYSTEM_NAME MATCHES "Linux")
+        set(CPACK_DEBIAN_PACKAGE_NAME "${CPACK_PACKAGE_NAME}_${CPACK_PACKAGE_VERSION}_${X_PROJECT_OSNAME}_${X_PROJECT_ARCH}")
+    endif()
 
     if (WIN32)
         set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}_${X_PROJECT_OSNAME}_portable_${CPACK_PACKAGE_VERSION}")
@@ -45,6 +81,7 @@ function(deploy_init)
     message(STATUS qt_version_${QT_VERSION_MAJOR})
     message(STATUS "CPACK_DEBIAN_PACKAGE_NAME: ${CPACK_DEBIAN_PACKAGE_NAME}")
     message(STATUS "CPACK_PACKAGE_FILE_NAME: ${CPACK_PACKAGE_FILE_NAME}")
+    message(STATUS "X_PROJECT_OSNAME: ${X_PROJECT_OSNAME}")
 endfunction()
 
 function(deploy_msvc)
