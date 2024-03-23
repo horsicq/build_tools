@@ -60,6 +60,12 @@ endfunction()
 function(deploy_init)
     get_envs()
 
+    if(APPLE)
+        set (CMAKE_OSX_ARCHITECTURES x86_64 PARENT_SCOPE)
+        add_compile_options(-Wno-deprecated-declarations)
+        add_compile_options(-Wno-switch)
+    endif()
+
     #set(CPACK_SOURCE_GENERATOR "ZIP")
     set(CPACK_INCLUDE_TOPLEVEL_DIRECTORY OFF)
     set(CPACK_OUTPUT_FILE_PREFIX packages)
