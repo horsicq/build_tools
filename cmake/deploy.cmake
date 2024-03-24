@@ -33,7 +33,7 @@ function(get_envs)
         set(X_PROJECT_OSNAME ${X_OS_NAME}_${X_OS_VERSION} PARENT_SCOPE)
 
         if (EXISTS "/etc/debian_version")
-            file (STRINGS "/etc/debian_version" X_DEBIAN_VERSION PARENT_SCOPE)
+            file (STRINGS "/etc/debian_version" X_DEBIAN_VERSION)
             message(STATUS ${X_DEBIAN_VERSION})
             if (X_DEBIAN_VERSION MATCHES "squeeze")
                 set(X_DEBIAN_VERSION "6" PARENT_SCOPE)
