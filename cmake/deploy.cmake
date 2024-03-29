@@ -1,11 +1,9 @@
-function(get_envs)
+function(deploy_init)
     set(X_PROJECT_ARCH "x86" PARENT_SCOPE)
     message(STATUS CMAKE_SYSTEM_PROCESSOR: ${CMAKE_SYSTEM_PROCESSOR})
     if ("${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "x86_64")
         set(X_PROJECT_ARCH "amd64" PARENT_SCOPE)
     endif()
-
-    message(STATUS ${X_PROJECT_ARCH})
 
     if (WIN32)
         if ("${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "x86_64")
@@ -58,12 +56,9 @@ function(get_envs)
             message(STATUS "X_DEBIAN_VERSION: ${X_DEBIAN_VERSION}")
             message(STATUS "CMAKE_SYSTEM_NAME: ${CMAKE_SYSTEM_NAME}")
         endif()
-    endif()
-endfunction()
 
-function(deploy_init)
-    get_envs()
-    message(STATUS "X_DEBIAN_VERSION: ${X_DEBIAN_VERSION}")
+        message(STATUS "X_DEBIAN_VERSION: ${X_DEBIAN_VERSION}")
+    endif()
 
     if(APPLE)
         set (CMAKE_OSX_ARCHITECTURES x86_64 PARENT_SCOPE) # TODO‚
@@ -103,7 +98,11 @@ function(deploy_init)
 
     configure_file("${PROJECT_SOURCE_DIR}/../res/resource.rc.in" "${PROJECT_SOURCE_DIR}/../res/resource.rc" @ONLY)
 
-    message(STATUS "X_COMPANYNAME: ${X_COMPANYNAME}")
+    get_cmake_property(_variableNames VARIABLES)
+    list (SORT _variableNames)
+    foreach (_variableName ${_variableNames})
+        message(STATUS "${_variableName}=${${_variableName}}")
+    endforeach()
 endfunction()
 
 function(deploy_msvc)
