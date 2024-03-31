@@ -2,33 +2,36 @@ function(deploy_init)
     set(X_PROJECT_ARCH "x86" PARENT_SCOPE)
     message(STATUS CMAKE_SYSTEM_PROCESSOR: ${CMAKE_SYSTEM_PROCESSOR})
     if ("${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "x86_64")
-        set(X_PROJECT_ARCH "amd64" PARENT_SCOPE)
+        set(X_PROJECT_ARCH "amd64")
     endif()
 
     if (WIN32)
         if ("${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "x86_64")
-            set(X_PROJECT_OSNAME "win64" PARENT_SCOPE)
+            set(X_PROJECT_OSNAME "win64")
         else()
-            set(X_PROJECT_OSNAME "win32" PARENT_SCOPE)
+            set(X_PROJECT_OSNAME "win32")
         endif()
 
         if(MSVC)
             if(${MSVC_VERSION} EQUAL 1800)
-                set(X_PROJECT_OSNAME "winxp" PARENT_SCOPE)
+                set(X_PROJECT_OSNAME "winxp")
             endif()
         endif()
     endif()
     if (CMAKE_SYSTEM_NAME MATCHES "Linux")
         execute_process (
-            COMMAND bash -c "grep -E '^(ID)=' /etc/os-release"
+            COMMAND bash -c ". /etc/os-release; echo -n $NAME"
             OUTPUT_VARIABLE X_OS_NAME
         )
         execute_process (
-            COMMAND bash -c "grep -E '^(VERSION_ID)=' /etc/os-release"
+            COMMAND bash -c ". /etc/os-release; echo -n $VERSION_ID"
             OUTPUT_VARIABLE X_OS_VERSION
         )
 
-        set(X_PROJECT_OSNAME ${X_OS_NAME}_${X_OS_VERSION} PARENT_SCOPE)
+        set(X_PROJECT_OSNAME ${X_OS_NAME}_${X_OS_VERSION})
+        message(STATUS X_OS_NAME: ${X_OS_NAME})
+        message(STATUS X_OS_VERSION: ${X_OS_VERSION})
+        message(STATUS X_PROJECT_OSNAME: ${X_PROJECT_OSNAME})
 
         if (EXISTS "/etc/debian_version")
             file (STRINGS "/etc/debian_version" X_DEBIAN_VERSION)
@@ -81,7 +84,7 @@ function(deploy_init)
     set(CPACK_PACKAGE_HOMEPAGE_URL ${X_HOMEPAGE})
 
     if (CMAKE_SYSTEM_NAME MATCHES "Linux")
-        set(CPACK_DEBIAN_PACKAGE_NAME "${CPACK_PACKAGE_NAME}_${CPACK_PACKAGE_VERSION}_${X_PROJECT_OSNAME}_${X_PROJECT_ARCH}")
+        set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}_${CPACK_PACKAGE_VERSION}_${X_PROJECT_OSNAME}_${X_PROJECT_ARCH}")
     endif()
 
     if (WIN32)
@@ -98,11 +101,12 @@ function(deploy_init)
 
     configure_file("${PROJECT_SOURCE_DIR}/../res/resource.rc.in" "${PROJECT_SOURCE_DIR}/../res/resource.rc" @ONLY)
 
-    get_cmake_property(_variableNames VARIABLES)
-    list (SORT _variableNames)
-    foreach (_variableName ${_variableNames})
-        message(STATUS "${_variableName}=${${_variableName}}")
-    endforeach()
+    message(STATUS CPACK_DEBIAN_PACKAGE_NAME: ${CPACK_DEBIAN_PACKAGE_NAME})
+#    get_cmake_property(_variableNames VARIABLES)
+#    list (SORT _variableNames)
+#    foreach (_variableName ${_variableNames})
+#        message(STATUS "${_variableName}=${${_variableName}}")
+#    endforeach()
 endfunction()
 
 function(deploy_msvc)
