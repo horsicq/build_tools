@@ -1,5 +1,5 @@
 function(deploy_init)
-    set(X_PROJECT_ARCH "x86" PARENT_SCOPE)
+    set(X_PROJECT_ARCH "x86")
     message(STATUS CMAKE_SYSTEM_PROCESSOR: ${CMAKE_SYSTEM_PROCESSOR})
     if ("${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "x86_64")
         set(X_PROJECT_ARCH "amd64")
@@ -54,7 +54,7 @@ function(deploy_init)
                 set(X_DEBIAN_VERSION "11")
             endif()
 
-            set(X_DEBIAN_VERSION ${X_DEBIAN_VERSION} PARENT_SCOPE)
+            set(X_DEBIAN_VERSION ${X_DEBIAN_VERSION})
 
             message(STATUS "X_DEBIAN_VERSION: ${X_DEBIAN_VERSION}")
             message(STATUS "CMAKE_SYSTEM_NAME: ${CMAKE_SYSTEM_NAME}")
@@ -64,7 +64,7 @@ function(deploy_init)
     endif()
 
     if(APPLE)
-        set (CMAKE_OSX_ARCHITECTURES x86_64 PARENT_SCOPE) # TODO‚
+        set (CMAKE_OSX_ARCHITECTURES x86_64) # TODO‚
         add_compile_options(-Wno-deprecated-declarations)
         add_compile_options(-Wno-switch)
     endif()
@@ -79,11 +79,11 @@ function(deploy_init)
     set(CPACK_PACKAGE_INSTALL_DIRECTORY ${X_PROJECTNAME})
     set(CPACK_PACKAGE_INSTALL_REGISTRY_KEY ${X_PROJECTNAME})
     set(CPACK_PACKAGE_VENDOR ${X_COMPANYNAME})
-    set(CPACK_DEBIAN_PACKAGE_MAINTAINER ${X_MAINTAINER})
     set(CPACK_PACKAGE_DESCRIPTION ${X_DESCRIPTION})
     set(CPACK_PACKAGE_HOMEPAGE_URL ${X_HOMEPAGE})
 
     if (CMAKE_SYSTEM_NAME MATCHES "Linux")
+        set(CPACK_DEBIAN_PACKAGE_MAINTAINER ${X_MAINTAINER})
         set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}_${CPACK_PACKAGE_VERSION}_${X_PROJECT_OSNAME}_${X_PROJECT_ARCH}")
     endif()
 
@@ -124,13 +124,29 @@ function(deploy_init)
             list(APPEND X_DEBIAN_PACKAGE_DEPENDS "libqt5scripttools5")
         endif()
 
+        if (NOT "${Qt6Core_VERSION}" STREQUAL "")
+            list(APPEND X_DEBIAN_PACKAGE_DEPENDS "libqt6core6")
+        endif()
+        if (NOT "${Qt6Gui_VERSION}" STREQUAL "")
+            list(APPEND X_DEBIAN_PACKAGE_DEPENDS "libqt6gui6")
+        endif()
+        if (NOT "${Qt6Widgets_VERSION}" STREQUAL "")
+            list(APPEND X_DEBIAN_PACKAGE_DEPENDS "libqt6widgets6")
+        endif()
+        if (NOT "${Qt6Sql_VERSION}" STREQUAL "")
+            list(APPEND X_DEBIAN_PACKAGE_DEPENDS "libqt6sql6")
+        endif()
+        if (NOT "${Qt6Network_VERSION}" STREQUAL "")
+            list(APPEND X_DEBIAN_PACKAGE_DEPENDS "libqt6network6")
+        endif()
+
         string(REPLACE ";" ", " CPACK_DEBIAN_PACKAGE_DEPENDS "${X_DEBIAN_PACKAGE_DEPENDS}")
         message(STATUS CPACK_DEBIAN_PACKAGE_DEPENDS: ${CPACK_DEBIAN_PACKAGE_DEPENDS})
     endif()
 
     include(CPack)
 
-    if(MSVC)
+    if(WIN32)
         configure_file("${PROJECT_SOURCE_DIR}/../res/resource.rc.in" "${PROJECT_SOURCE_DIR}/../res/resource.rc" @ONLY)
     endif()
 
