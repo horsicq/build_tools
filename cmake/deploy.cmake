@@ -59,8 +59,6 @@ function(deploy_init)
             message(STATUS "X_DEBIAN_VERSION: ${X_DEBIAN_VERSION}")
             message(STATUS "CMAKE_SYSTEM_NAME: ${CMAKE_SYSTEM_NAME}")
         endif()
-
-        message(STATUS "X_DEBIAN_VERSION: ${X_DEBIAN_VERSION}")
     endif()
 
     if(APPLE)
