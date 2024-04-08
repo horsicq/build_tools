@@ -62,7 +62,7 @@ function(deploy_init)
     endif()
 
     if(APPLE)
-        set (CMAKE_OSX_ARCHITECTURES x86_64) # TODO‚
+        set (CMAKE_OSX_ARCHITECTURES x86_64) # TODO
         add_compile_options(-Wno-deprecated-declarations)
         add_compile_options(-Wno-switch)
     endif()
@@ -91,6 +91,7 @@ function(deploy_init)
     endif()
 
     if (CMAKE_SYSTEM_NAME MATCHES "Linux")
+        # Qt5
         if (NOT "${Qt5Core_VERSION}" STREQUAL "")
             if (X_DEBIAN_VERSION LESS 11)
                 list(APPEND X_DEBIAN_PACKAGE_DEPENDS "qt5-default")
@@ -122,7 +123,7 @@ function(deploy_init)
         if (NOT "${Qt5ScriptTools_VERSION}" STREQUAL "")
             list(APPEND X_DEBIAN_PACKAGE_DEPENDS "libqt5scripttools5")
         endif()
-
+        # Qt6
         if (NOT "${Qt6Core_VERSION}" STREQUAL "")
             list(APPEND X_DEBIAN_PACKAGE_DEPENDS "libqt6core6")
         endif()
