@@ -62,7 +62,7 @@ function(deploy_init)
     endif()
 
     if(APPLE)
-        set (CMAKE_OSX_ARCHITECTURES x86_64) # TODO
+        set (CMAKE_OSX_ARCHITECTURES x86_64) # TODO make option
         add_compile_options(-Wno-deprecated-declarations)
         add_compile_options(-Wno-switch)
     endif()
@@ -84,6 +84,7 @@ function(deploy_init)
         set(CPACK_DEBIAN_PACKAGE_MAINTAINER ${X_MAINTAINER})
         set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}_${CPACK_PACKAGE_VERSION}_${X_PROJECT_OSNAME}_${X_PROJECT_ARCH}")
         message(STATUS CPACK_DEBIAN_PACKAGE_NAME: ${CPACK_DEBIAN_PACKAGE_NAME})
+        #set(CPACK_DEBIAN_PACKAGE_SECTION ${X_SECTION})
     endif()
 
     if (WIN32)
