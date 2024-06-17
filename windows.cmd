@@ -1,4 +1,4 @@
-@echo off
+rem @echo off
 call:%~1 "%~2" "%~3"
 goto exit
 
