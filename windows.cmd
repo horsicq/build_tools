@@ -3,6 +3,7 @@ goto exit
 
 :check_file
     echo "Check file"
+    echo %~1
     IF EXIST "%~1" (
         echo "Check file:  %~1: TRUE"
     ) ELSE (
