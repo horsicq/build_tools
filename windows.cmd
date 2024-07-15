@@ -100,7 +100,7 @@ goto exit
     
 :deploy_qt_plugin
     mkdir %X_SOURCE_PATH%\release\%X_BUILD_NAME%\%~1
-    echo "%X_QT_INSTALL_PLUGINS%\%~1\%~2.dll %X_SOURCE_PATH%\release\%X_BUILD_NAME%\%~1\"
+    echo "Copying plugin: %X_QT_INSTALL_PLUGINS%\%~1\%~2.dll to %X_SOURCE_PATH%\release\%X_BUILD_NAME%\%~1\"
     copy %X_QT_INSTALL_PLUGINS%\%~1\%~2.dll %X_SOURCE_PATH%\release\%X_BUILD_NAME%\%~1\
     goto:eof
     
