@@ -110,6 +110,7 @@ function create_deb_app_dir
     mkdir -p $X_SOURCE_PATH/release/$X_BUILD_NAME/usr/share
     mkdir -p $X_SOURCE_PATH/release/$X_BUILD_NAME/usr/share/applications
     mkdir -p $X_SOURCE_PATH/release/$X_BUILD_NAME/usr/share/icons
+    mkdir -p $X_SOURCE_PATH/release/$X_BUILD_NAME/usr/share/metainfo
 }
 
 function create_deb_control
@@ -151,6 +152,7 @@ function create_image_app_dir
     mkdir -p $X_SOURCE_PATH/release/appDir/usr/share
     mkdir -p $X_SOURCE_PATH/release/appDir/usr/share/applications
     mkdir -p $X_SOURCE_PATH/release/appDir/usr/share/icons
+    mkdir -p $X_SOURCE_PATH/release/appDir/usr/share/metainfo
 }
 
 function create_run_shell 
