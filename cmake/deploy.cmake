@@ -153,11 +153,18 @@ function(deploy_init)
     if(WIN32)
         configure_file("${PROJECT_SOURCE_DIR}/../res/resource.rc.in" "${PROJECT_SOURCE_DIR}/../res/resource.rc" @ONLY)
     endif()
-#    get_cmake_property(_variableNames VARIABLES)
-#    list (SORT _variableNames)
-#    foreach (_variableName ${_variableNames})
-#        message(STATUS "${_variableName}=${${_variableName}}")
-#    endforeach()
+
+   # get_cmake_property(_variableNames VARIABLES)
+   # list (SORT _variableNames)
+   # foreach (_variableName ${_variableNames})
+   #     message(STATUS "${_variableName}=${${_variableName}}")
+   # endforeach()
+
+   # foreach(loopVAR IN LISTS PROJECT_SOURCES)
+   #    message("Source from a PROJECT_SOURCES: ${loopVAR}")
+   #    set_property(SOURCE ${loopVAR} PROPERTY COMPILE_OPTIONS ${a_FLAGS})
+   # endforeach()
+
 endfunction()
 
 function(deploy_msvc)
