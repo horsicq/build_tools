@@ -5,6 +5,8 @@ function(deploy_init)
         set(X_PROJECT_ARCH "amd64")
     endif()
 
+    message(STATUS X_PROJECT_ARCH: ${X_PROJECT_ARCH})
+
     if (WIN32)
         if (CMAKE_SIZEOF_VOID_P EQUAL 8)
             set(X_PROJECT_OSNAME "win64")
@@ -165,6 +167,45 @@ function(deploy_init)
    #    set_property(SOURCE ${loopVAR} PROPERTY COMPILE_OPTIONS ${a_FLAGS})
    # endforeach()
 
+endfunction()
+
+function(x_init_translation)
+    set(TS_FILES
+        ${CMAKE_CURRENT_LIST_DIR}/translation/${X_ORIGINAL_FILENAME}_ar_AR.ts
+        ${CMAKE_CURRENT_LIST_DIR}/translation/${X_ORIGINAL_FILENAME}_bn_BN.ts
+        ${CMAKE_CURRENT_LIST_DIR}/translation/${X_ORIGINAL_FILENAME}_de_DE.ts
+        ${CMAKE_CURRENT_LIST_DIR}/translation/${X_ORIGINAL_FILENAME}_es_ES.ts
+        ${CMAKE_CURRENT_LIST_DIR}/translation/${X_ORIGINAL_FILENAME}_fa_FA.ts
+        ${CMAKE_CURRENT_LIST_DIR}/translation/${X_ORIGINAL_FILENAME}_fr_FR.ts
+        ${CMAKE_CURRENT_LIST_DIR}/translation/${X_ORIGINAL_FILENAME}_he_IL.ts
+        ${CMAKE_CURRENT_LIST_DIR}/translation/${X_ORIGINAL_FILENAME}_id_ID.ts
+        ${CMAKE_CURRENT_LIST_DIR}/translation/${X_ORIGINAL_FILENAME}_it_IT.ts
+        ${CMAKE_CURRENT_LIST_DIR}/translation/${X_ORIGINAL_FILENAME}_ja_JP.ts
+        ${CMAKE_CURRENT_LIST_DIR}/translation/${X_ORIGINAL_FILENAME}_ko_KR.ts
+        ${CMAKE_CURRENT_LIST_DIR}/translation/${X_ORIGINAL_FILENAME}_pl_PL.ts
+        ${CMAKE_CURRENT_LIST_DIR}/translation/${X_ORIGINAL_FILENAME}_pt_BR.ts
+        ${CMAKE_CURRENT_LIST_DIR}/translation/${X_ORIGINAL_FILENAME}_pt_PT.ts
+        ${CMAKE_CURRENT_LIST_DIR}/translation/${X_ORIGINAL_FILENAME}_ru_RU.ts
+        ${CMAKE_CURRENT_LIST_DIR}/translation/${X_ORIGINAL_FILENAME}_sv_SE.ts
+        ${CMAKE_CURRENT_LIST_DIR}/translation/${X_ORIGINAL_FILENAME}_tr_TR.ts
+        ${CMAKE_CURRENT_LIST_DIR}/translation/${X_ORIGINAL_FILENAME}_uk_UA.ts
+        ${CMAKE_CURRENT_LIST_DIR}/translation/${X_ORIGINAL_FILENAME}_vi_VN.ts
+        ${CMAKE_CURRENT_LIST_DIR}/translation/${X_ORIGINAL_FILENAME}_zh_CN.ts
+        ${CMAKE_CURRENT_LIST_DIR}/translation/${X_ORIGINAL_FILENAME}_zh_TW.ts
+        PARENT_SCOPE
+    )
+endfunction()
+
+function(x_create_translation)
+    # foreach(loopVAR IN LISTS TS_FILES)
+    #     add_custom_command(
+    #         OUTPUT ${loopVAR}
+    #         COMMAND lupdate ${PROJECT_SOURCE_DIR} -ts ${loopVAR}
+    #         DEPENDS ${PROJECT_SOURCES}
+    #     )
+    # endforeach()
+    qt5_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES} OPTIONS -locations none)
+    add_custom_target(translations DEPENDS ${QM_FILES})
 endfunction()
 
 function(deploy_msvc)
