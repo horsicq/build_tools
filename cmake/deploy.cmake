@@ -170,6 +170,8 @@ function(deploy_init)
 endfunction()
 
 function(x_init_translation)
+    #file(MAKE_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/translation)
+
     set(TS_FILES
         ${CMAKE_CURRENT_LIST_DIR}/translation/${X_ORIGINAL_FILENAME}_ar_AR.ts
         ${CMAKE_CURRENT_LIST_DIR}/translation/${X_ORIGINAL_FILENAME}_bn_BN.ts
@@ -204,6 +206,7 @@ function(x_create_translation)
     #         DEPENDS ${PROJECT_SOURCES}
     #     )
     # endforeach()
+
     if(${QT_VERSION_MAJOR} EQUAL 5)
         qt5_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES} OPTIONS -locations none)
         add_custom_target(translations DEPENDS ${QM_FILES})
