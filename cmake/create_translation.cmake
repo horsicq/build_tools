@@ -1,0 +1,8 @@
+if(${QT_VERSION_MAJOR} EQUAL 5)
+    qt5_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES} OPTIONS -locations none)
+    add_custom_target(translations DEPENDS ${QM_FILES})
+endif()
+if(${QT_VERSION_MAJOR} EQUAL 6)
+    qt6_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES} OPTIONS -locations none)
+    add_custom_target(translations DEPENDS ${QM_FILES})
+endif()
