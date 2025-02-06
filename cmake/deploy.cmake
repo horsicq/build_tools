@@ -179,7 +179,7 @@ function(deploy_msvc)
 
             install (FILES "${VC_REDIST_DIR}/msvcp140.dll" DESTINATION "./" OPTIONAL)
             install (FILES "${VC_REDIST_DIR}/msvcp140_1.dll" DESTINATION "./" OPTIONAL)
-            #install (FILES "${VC_REDIST_DIR}/msvcp140_2.dll" DESTINATION "./" OPTIONAL)
+            install (FILES "${VC_REDIST_DIR}/msvcp140_2.dll" DESTINATION "./" OPTIONAL)
             install (FILES "${VC_REDIST_DIR}/vcruntime140.dll" DESTINATION "./"  OPTIONAL)
             install (FILES "${VC_REDIST_DIR}/vcruntime140_1.dll" DESTINATION "./" OPTIONAL)
         endif()
