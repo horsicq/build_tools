@@ -1,5 +1,15 @@
 message(STATUS ${MSVC_TOOLSET_VERSION})
 if(MSVC)
+    # Check if the Visual Studio version is 12.0 (Visual Studio 2013)
+    if(CMAKE_GENERATOR MATCHES "Visual Studio 12 2013")
+        set(VC_REDIST_DIR $ENV{VCINSTALLDIR}/redist/x86/Microsoft.VC120.CRT)
+        string(REPLACE "\\" "/" VC_REDIST_DIR ${VC_REDIST_DIR})
+        message(STATUS ${VC_REDIST_DIR})
+
+        install(FILES "${VC_REDIST_DIR}/msvcp120.dll" DESTINATION "./" OPTIONAL)
+        install(FILES "${VC_REDIST_DIR}/msvcr120.dll" DESTINATION "./" OPTIONAL)
+    endif()
+
     if(${MSVC_TOOLSET_VERSION} GREATER_EQUAL 142)
         set(VC_REDIST_DIR $ENV{VCToolsRedistDir}$ENV{Platform}/Microsoft.VC${MSVC_TOOLSET_VERSION}.CRT)
         string(REPLACE "\\" "/" VC_REDIST_DIR ${VC_REDIST_DIR})
