@@ -124,6 +124,12 @@ function create_deb_control
     if [ -n "$X_RELEASE_VERSION" ]; then
         echo "Version: $X_RELEASE_VERSION" >> $1
     fi
+    if [ -n "$X_PRIORITY" ]; then
+        echo "Priority: $X_PRIORITY" >> $1
+    fi
+    if [ -n "$X_SECTION" ]; then
+        echo "Section: $X_SECTION" >> $1
+    fi
     if [ -n "$X_ARCHITECTURE" ]; then
         echo "Architecture: $X_ARCHITECTURE" >> $1
     fi
