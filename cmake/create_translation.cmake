@@ -1,7 +1,7 @@
 message("Create translation")
 
 if(${QT_VERSION_MAJOR} EQUAL 5)
-    if(${QT_VERSION} VERSION_MORE 5.6.0)
+    if(${QT_VERSION} VERSION_GREATER_EQUAL 5.6.0)
         qt5_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES} OPTIONS -locations none)
         add_custom_target(translations DEPENDS ${QM_FILES})
     endif()
