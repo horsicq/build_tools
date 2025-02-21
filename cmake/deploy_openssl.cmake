@@ -1,5 +1,4 @@
 if(MSVC)
-    message(${CMAKE_GENERATOR})
     if(${MSVC_VERSION} EQUAL 1800)
         install (FILES "${CMAKE_CURRENT_LIST_DIR}/../openssl/winxp_x86/libeay32.dll" DESTINATION "./" OPTIONAL)
         install (FILES "${CMAKE_CURRENT_LIST_DIR}/../openssl/winxp_x86/ssleay32.dll" DESTINATION "./" OPTIONAL)
