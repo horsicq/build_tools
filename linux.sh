@@ -130,8 +130,8 @@ function create_run_shell
 {
     {
         echo "#!/bin/sh"
-        echo "CWD=\$(dirname \$0)"
-        echo "export LD_LIBRARY_PATH=\"\$CWD/base:\$LD_LIBRARY_PATH\""
+        echo 'CWD=$(dirname $0)'
+        echo 'export LD_LIBRARY_PATH="$CWD/base:$LD_LIBRARY_PATH"'
         echo "\$CWD/base/$2 \$*"
     } > $1
     
