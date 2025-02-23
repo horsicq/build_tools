@@ -36,28 +36,6 @@ function make_init
     
     echo "$X_DEBIAN_VERSION"
     
-    if      [[ $X_DEBIAN_VERSION == *"squeeze"* ]]; then
-        X_DEBIAN_VERSION="6"
-    elif    [[ $X_DEBIAN_VERSION == *"wheezy"* ]]; then
-        X_DEBIAN_VERSION="7"
-    elif    [[ $X_DEBIAN_VERSION == *"jessie"* ]]; then
-        X_DEBIAN_VERSION="8"
-    elif    [[ $X_DEBIAN_VERSION == *"jessie"* ]]; then
-        X_DEBIAN_VERSION="6"
-    elif    [[ $X_DEBIAN_VERSION == *"stretch"* ]]; then
-        X_DEBIAN_VERSION="9"
-    elif    [[ $X_DEBIAN_VERSION == *"buster"* ]]; then
-        X_DEBIAN_VERSION="10"
-    elif    [[ $X_DEBIAN_VERSION == *"bullseye"* ]]; then
-        X_DEBIAN_VERSION="11"
-    elif    [[ $X_DEBIAN_VERSION == *"bookworm"* ]]; then
-        X_DEBIAN_VERSION="12"
-    else
-        X_DEBIAN_VERSION="11"
-    fi
-    
-    echo "$X_DEBIAN_VERSION"
-    
     export X_DEBIAN_VERSION
     
     cp -f $X_SOURCE_PATH/build_tools/build.pri                  $X_SOURCE_PATH/
