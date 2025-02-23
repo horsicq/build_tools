@@ -80,7 +80,6 @@ function create_deb_app_dir
 
 function create_deb_control
 {
-# TODO Installed-Size:
     {
         if [ -n "$X_PACKAGENAME" ]; then
             echo "Package: $X_PACKAGENAME"
@@ -100,6 +99,7 @@ function create_deb_control
         if [ -n "$X_MAINTAINER" ]; then
             echo "Maintainer: $X_MAINTAINER"
         fi
+        echo "Installed-Size: $(du -sb --exclude $X_SOURCE_PATH/release/$X_BUILD_NAME/DEBIAN $X_SOURCE_PATH/release/$X_BUILD_NAME | cut -f 1)"
         if [ -n "$X_DEPENDS" ]; then
             echo "Depends: $X_DEPENDS"
         fi
