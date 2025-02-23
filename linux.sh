@@ -81,35 +81,35 @@ function create_deb_app_dir
 function create_deb_control
 {
 # TODO Installed-Size:
-    echo "" > $1
-
-    if [ -n "$X_PACKAGENAME" ]; then
-        echo "Package: $X_PACKAGENAME" >> $1
-    fi
-    if [ -n "$X_RELEASE_VERSION" ]; then
-        echo "Version: $X_RELEASE_VERSION" >> $1
-    fi
-    if [ -n "$X_PRIORITY" ]; then
-        echo "Priority: $X_PRIORITY" >> $1
-    fi
-    if [ -n "$X_SECTION" ]; then
-        echo "Section: $X_SECTION" >> $1
-    fi
-    if [ -n "$X_ARCHITECTURE" ]; then
-        echo "Architecture: $X_ARCHITECTURE" >> $1
-    fi
-    if [ -n "$X_MAINTAINER" ]; then
-        echo "Maintainer: $X_MAINTAINER" >> $1
-    fi
-    if [ -n "$X_DEPENDS" ]; then
-        echo "Depends: $X_DEPENDS" >> $1
-    fi
-    if [ -n "$X_HOMEPAGE" ]; then
-        echo "Homepage: $X_HOMEPAGE" >> $1
-    fi
-    if [ -n "$X_DESCRIPTION" ]; then
-        echo "Description: $X_DESCRIPTION" >> $1
-    fi
+    {
+        if [ -n "$X_PACKAGENAME" ]; then
+            echo "Package: $X_PACKAGENAME"
+        fi
+        if [ -n "$X_RELEASE_VERSION" ]; then
+            echo "Version: $X_RELEASE_VERSION"
+        fi
+        if [ -n "$X_PRIORITY" ]; then
+            echo "Priority: $X_PRIORITY"
+        fi
+        if [ -n "$X_SECTION" ]; then
+            echo "Section: $X_SECTION"
+        fi
+        if [ -n "$X_ARCHITECTURE" ]; then
+            echo "Architecture: $X_ARCHITECTURE"
+        fi
+        if [ -n "$X_MAINTAINER" ]; then
+            echo "Maintainer: $X_MAINTAINER"
+        fi
+        if [ -n "$X_DEPENDS" ]; then
+            echo "Depends: $X_DEPENDS"
+        fi
+        if [ -n "$X_HOMEPAGE" ]; then
+            echo "Homepage: $X_HOMEPAGE"
+        fi
+        if [ -n "$X_DESCRIPTION" ]; then
+            echo "Description: $X_DESCRIPTION"
+        fi
+    } > $1
 }
 
 function create_image_app_dir
@@ -128,10 +128,12 @@ function create_image_app_dir
 
 function create_run_shell 
 {
-    echo "#!/bin/sh" >> $1
-    echo "CWD=\$(dirname \$0)" >> $1
-    echo "export LD_LIBRARY_PATH=\"\$CWD/base:\$LD_LIBRARY_PATH\"" >> $1
-    echo "\$CWD/base/$2 \$*" >> $1
+    {
+        echo "#!/bin/sh"
+        echo "CWD=\$(dirname \$0)"
+        echo "export LD_LIBRARY_PATH=\"\$CWD/base:\$LD_LIBRARY_PATH\""
+        echo "\$CWD/base/$2 \$*"
+    } > $1
     
     chmod +x $1
 }
