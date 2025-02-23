@@ -32,7 +32,7 @@ function make_init
     # get DEBIAN version
     # TODO other Linuxes
 
-    X_DEBIAN_VERSION=$(cat /etc/debian_version | awk -F'.' '{ print $1 }')
+    X_DEBIAN_VERSION="$X_OS_NUMBER"
     
     echo "$X_DEBIAN_VERSION"
     
