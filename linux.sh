@@ -16,9 +16,13 @@ function make_init
     
     export X_ARCHITECTURE
     
-    # TODO Check command if exists
-    X_OS_NAME=$(lsb_release -is)
-    X_OS_NUMBER=$(lsb_release -rs)
+    if command -v lsb_release &>/dev/null; then
+        X_OS_NAME=$(lsb_release -is)
+        X_OS_NUMBER=$(lsb_release -rs)
+    else
+        X_OS_NAME=$(sed -nE 's/^ID=(\S+)$/\1/p' /etc/os-release)
+        X_OS_NUMBER=$(sed -nE 's/^VERSION_ID="?([-0-9a-z._]+)"?$/\1/p' /etc/os-release)
+    fi
 
     export X_OS_VERSION=${X_OS_NAME}_${X_OS_NUMBER}
     export X_QT_VERSION=$($QMAKE_PATH -query QT_VERSION)
@@ -32,29 +36,7 @@ function make_init
     # get DEBIAN version
     # TODO other Linuxes
 
-    X_DEBIAN_VERSION=$(cat /etc/debian_version | awk -F'.' '{ print $1 }')
-    
-    echo "$X_DEBIAN_VERSION"
-    
-    if      [[ $X_DEBIAN_VERSION == *"squeeze"* ]]; then
-        X_DEBIAN_VERSION="6"
-    elif    [[ $X_DEBIAN_VERSION == *"wheezy"* ]]; then
-        X_DEBIAN_VERSION="7"
-    elif    [[ $X_DEBIAN_VERSION == *"jessie"* ]]; then
-        X_DEBIAN_VERSION="8"
-    elif    [[ $X_DEBIAN_VERSION == *"jessie"* ]]; then
-        X_DEBIAN_VERSION="6"
-    elif    [[ $X_DEBIAN_VERSION == *"stretch"* ]]; then
-        X_DEBIAN_VERSION="9"
-    elif    [[ $X_DEBIAN_VERSION == *"buster"* ]]; then
-        X_DEBIAN_VERSION="10"
-    elif    [[ $X_DEBIAN_VERSION == *"bullseye"* ]]; then
-        X_DEBIAN_VERSION="11"
-    elif    [[ $X_DEBIAN_VERSION == *"bookworm"* ]]; then
-        X_DEBIAN_VERSION="12"
-    else
-        X_DEBIAN_VERSION="11"
-    fi
+    X_DEBIAN_VERSION="$X_OS_NUMBER"
     
     echo "$X_DEBIAN_VERSION"
     
@@ -102,36 +84,36 @@ function create_deb_app_dir
 
 function create_deb_control
 {
-# TODO Installed-Size:
-    echo "" > $1
-
-    if [ -n "$X_PACKAGENAME" ]; then
-        echo "Package: $X_PACKAGENAME" >> $1
-    fi
-    if [ -n "$X_RELEASE_VERSION" ]; then
-        echo "Version: $X_RELEASE_VERSION" >> $1
-    fi
-    if [ -n "$X_PRIORITY" ]; then
-        echo "Priority: $X_PRIORITY" >> $1
-    fi
-    if [ -n "$X_SECTION" ]; then
-        echo "Section: $X_SECTION" >> $1
-    fi
-    if [ -n "$X_ARCHITECTURE" ]; then
-        echo "Architecture: $X_ARCHITECTURE" >> $1
-    fi
-    if [ -n "$X_MAINTAINER" ]; then
-        echo "Maintainer: $X_MAINTAINER" >> $1
-    fi
-    if [ -n "$X_DEPENDS" ]; then
-        echo "Depends: $X_DEPENDS" >> $1
-    fi
-    if [ -n "$X_HOMEPAGE" ]; then
-        echo "Homepage: $X_HOMEPAGE" >> $1
-    fi
-    if [ -n "$X_DESCRIPTION" ]; then
-        echo "Description: $X_DESCRIPTION" >> $1
-    fi
+    {
+        if [ -n "$X_PACKAGENAME" ]; then
+            echo "Package: $X_PACKAGENAME"
+        fi
+        if [ -n "$X_RELEASE_VERSION" ]; then
+            echo "Version: $X_RELEASE_VERSION"
+        fi
+        if [ -n "$X_PRIORITY" ]; then
+            echo "Priority: $X_PRIORITY"
+        fi
+        if [ -n "$X_SECTION" ]; then
+            echo "Section: $X_SECTION"
+        fi
+        if [ -n "$X_ARCHITECTURE" ]; then
+            echo "Architecture: $X_ARCHITECTURE"
+        fi
+        if [ -n "$X_MAINTAINER" ]; then
+            echo "Maintainer: $X_MAINTAINER"
+        fi
+        echo "Installed-Size: $(du -sb --exclude $X_SOURCE_PATH/release/$X_BUILD_NAME/DEBIAN $X_SOURCE_PATH/release/$X_BUILD_NAME | cut -f 1)"
+        if [ -n "$X_DEPENDS" ]; then
+            echo "Depends: $X_DEPENDS"
+        fi
+        if [ -n "$X_HOMEPAGE" ]; then
+            echo "Homepage: $X_HOMEPAGE"
+        fi
+        if [ -n "$X_DESCRIPTION" ]; then
+            echo "Description: $X_DESCRIPTION"
+        fi
+    } > $1
 }
 
 function create_image_app_dir
@@ -150,10 +132,12 @@ function create_image_app_dir
 
 function create_run_shell 
 {
-    echo "#!/bin/sh" >> $1
-    echo "CWD=\$(dirname \$0)" >> $1
-    echo "export LD_LIBRARY_PATH=\"\$CWD/base:\$LD_LIBRARY_PATH\"" >> $1
-    echo "\$CWD/base/$2 \$*" >> $1
+    {
+        echo "#!/bin/sh"
+        echo 'CWD=$(dirname $0)'
+        echo 'export LD_LIBRARY_PATH="$CWD/base:$LD_LIBRARY_PATH"'
+        echo "\$CWD/base/$2 \$*"
+    } > $1
     
     chmod +x $1
 }
