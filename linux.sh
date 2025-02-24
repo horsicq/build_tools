@@ -16,9 +16,13 @@ function make_init
     
     export X_ARCHITECTURE
     
-    # TODO Check command if exists
-    X_OS_NAME=$(lsb_release -is)
-    X_OS_NUMBER=$(lsb_release -rs)
+    if command -v lsb_release &>/dev/null; then
+        X_OS_NAME=$(lsb_release -is)
+        X_OS_NUMBER=$(lsb_release -rs)
+    else
+        X_OS_NAME=$(sed -nE 's/^ID=(\S+)$/\1/p' /etc/os-release)
+        X_OS_NUMBER=$(sed -nE 's/^VERSION_ID="?([-0-9a-z._]+)"?$/\1/p' /etc/os-release)
+    fi
 
     export X_OS_VERSION=${X_OS_NAME}_${X_OS_NUMBER}
     export X_QT_VERSION=$($QMAKE_PATH -query QT_VERSION)
