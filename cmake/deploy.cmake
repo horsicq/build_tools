@@ -1,8 +1,34 @@
 function(deploy_init)
     set(X_PROJECT_ARCH "x86")
-    message(STATUS CMAKE_SYSTEM_PROCESSOR: ${CMAKE_SYSTEM_PROCESSOR})
-    if ("${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "AMD64")
+
+    # x86 architecture detection
+    if("${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "AMD64" OR "${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "x86_64")
         set(X_PROJECT_ARCH "amd64")
+    elseif("${CMAKE_SYSTEM_PROCESSOR}" MATCHES "i[3-6]86" OR "${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "x86")
+        set(X_PROJECT_ARCH "x86")
+
+    # ARM architecture detection
+    elseif("${CMAKE_SYSTEM_PROCESSOR}" MATCHES "^arm" OR "${CMAKE_SYSTEM_PROCESSOR}" MATCHES "armv[0-9]")
+        set(X_PROJECT_ARCH "arm")
+    elseif("${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "aarch64" OR "${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "arm64")
+        set(X_PROJECT_ARCH "arm64")
+
+    # Other common architectures
+    elseif("${CMAKE_SYSTEM_PROCESSOR}" MATCHES "^(powerpc|ppc)64")
+        set(X_PROJECT_ARCH "ppc64")
+    elseif("${CMAKE_SYSTEM_PROCESSOR}" MATCHES "^(powerpc|ppc)")
+        set(X_PROJECT_ARCH "ppc")
+    elseif("${CMAKE_SYSTEM_PROCESSOR}" MATCHES "mips")
+        set(X_PROJECT_ARCH "mips")
+    elseif("${CMAKE_SYSTEM_PROCESSOR}" MATCHES "riscv")
+        if("${CMAKE_SYSTEM_PROCESSOR}" MATCHES "64")
+            set(X_PROJECT_ARCH "riscv64")
+        else()
+            set(X_PROJECT_ARCH "riscv32")
+        endif()
+    else()
+        message(WARNING "Unknown architecture: ${CMAKE_SYSTEM_PROCESSOR}")
+        set(X_PROJECT_ARCH "${CMAKE_SYSTEM_PROCESSOR}")
     endif()
 
     message(STATUS X_PROJECT_ARCH: ${X_PROJECT_ARCH})
@@ -10,10 +36,8 @@ function(deploy_init)
     if (WIN32)
         if (CMAKE_SIZEOF_VOID_P EQUAL 8)
             set(X_PROJECT_OSNAME "win64")
-            set(X_PROJECT_ARCH "amd64")
         else()
             set(X_PROJECT_OSNAME "win32")
-            set(X_PROJECT_ARCH "x86")
         endif()
 
         if(MSVC)
