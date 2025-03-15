@@ -10,3 +10,7 @@ if(${QT_VERSION_MAJOR} EQUAL 6)
     qt6_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES} OPTIONS -locations none)
     add_custom_target(translations DEPENDS ${QM_FILES})
 endif()
+
+if (DEFINED X_RESOURCES)
+    install (FILES ${QM_FILES} DESTINATION "${X_RESOURCES}/Lang" OPTIONAL)
+endif()
