@@ -93,9 +93,6 @@ if (CMAKE_SYSTEM_NAME MATCHES "Linux")
 
     # Qt5
     if (NOT "${Qt5Core_VERSION}" STREQUAL "")
-        if (X_DEBIAN_VERSION LESS 11)
-            list(APPEND X_DEBIAN_PACKAGE_DEPENDS "qt5-default")
-        endif()
         list(APPEND X_DEBIAN_PACKAGE_DEPENDS "libqt5core5a")
         list(APPEND X_DEBIAN_PACKAGE_DEPENDS "libqt5dbus5") # TODO Check
     endif()
