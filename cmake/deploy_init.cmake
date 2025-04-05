@@ -10,6 +10,7 @@ if (WIN32)
     endif()
 
     if(MSVC)
+        set(X_PROJECT_ARCH $ENV{Platform})
         if(${MSVC_VERSION} EQUAL 1800)
             set(X_PROJECT_OSNAME "winxp")
             set(X_PROJECT_ARCH "x86")
