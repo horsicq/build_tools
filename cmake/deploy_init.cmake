@@ -86,9 +86,25 @@ if (WIN32)
 endif()
 
 if (CMAKE_SYSTEM_NAME MATCHES "Linux")
+    set(X_DEB_ARCH ${X_PROJECT_ARCH})
+
+    # Standard mappings between CMake and Debian architectures
+    if(CMAKE_ARCH STREQUAL "x86_64")
+        set(X_DEB_ARCH "amd64")
+    elseif(CMAKE_ARCH MATCHES "^i[3456]86$")
+        set(X_DEB_ARCH "i386")
+    elseif(CMAKE_ARCH MATCHES "^armv7")
+        set(X_DEB_ARCH "armhf")
+    elseif(CMAKE_ARCH STREQUAL "aarch64")
+        set(X_DEB_ARCH "arm64")
+    elseif(CMAKE_ARCH STREQUAL "ppc64le")
+        set(X_DEB_ARCH "ppc64el")
+    endif()
+
     set(CPACK_SOURCE_GENERATOR "TGZ;DEB")
     set(CPACK_DEBIAN_PACKAGE_MAINTAINER ${X_MAINTAINER})
     set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}_${CPACK_PACKAGE_VERSION}_${X_PROJECT_OSNAME}_${X_PROJECT_ARCH}")
+    set(CPACK_DEBIAN_PACKAGE_NAME "${CPACK_PACKAGE_NAME}_${CPACK_PACKAGE_VERSION}_${X_PROJECT_OSNAME}_${X_DEB_ARCH}")
     message(STATUS CPACK_DEBIAN_PACKAGE_NAME: ${CPACK_DEBIAN_PACKAGE_NAME})
     #set(CPACK_DEBIAN_PACKAGE_SECTION ${X_SECTION})
 
