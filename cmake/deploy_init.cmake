@@ -61,7 +61,9 @@ if (CMAKE_SYSTEM_NAME MATCHES "Linux")
 endif()
 
 if(APPLE)
+    set(X_PROJECT_OSNAME "macOS")
     set (CMAKE_OSX_ARCHITECTURES x86_64) # TODO make option
+    set (X_PROJECT_ARCH x86_64)
     add_compile_options(-Wno-deprecated-declarations)
     add_compile_options(-Wno-switch)
     set(X_MACOS_ICON "${PROJECT_SOURCE_DIR}/../res/main.icns")
