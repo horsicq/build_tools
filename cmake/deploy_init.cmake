@@ -161,6 +161,8 @@ if (CMAKE_SYSTEM_NAME MATCHES "Linux")
 endif()
 
 if(APPLE)
+    configure_file("${PROJECT_SOURCE_DIR}/../res/Info.plist.in" "${PROJECT_SOURCE_DIR}/../res/Info.plist" @ONLY)
+
     set(CPACK_GENERATOR "Bundle;productbuild;ZIP")
     set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}_${CPACK_PACKAGE_VERSION}_${X_PROJECT_OSNAME}_${X_PROJECT_ARCH}")
     set(CPACK_BUNDLE_NAME ${X_PROJECTNAME})
