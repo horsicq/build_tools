@@ -71,7 +71,10 @@ if(APPLE)
 endif()
 
 configure_file("${PROJECT_SOURCE_DIR}/../LICENSE" "${PROJECT_SOURCE_DIR}/../res/license.txt" @ONLY)
-configure_file("${PROJECT_SOURCE_DIR}/../README.md" "${PROJECT_SOURCE_DIR}/../res/readme.txt" @ONLY)
+
+if(NOT EXISTS "${PROJECT_SOURCE_DIR}/../res/readme.txt")
+    configure_file("${PROJECT_SOURCE_DIR}/../README.md" "${PROJECT_SOURCE_DIR}/../res/readme.txt" @ONLY)
+endif()
 
 set(CPACK_INCLUDE_TOPLEVEL_DIRECTORY OFF)
 set(CPACK_OUTPUT_FILE_PREFIX packages)
