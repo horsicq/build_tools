@@ -13,6 +13,17 @@ if(WIN32)
     set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} /MANIFEST:NO")
 endif()
 
+if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    message(STATUS "Using GNU Compiler")
+    #TODO
+elseif (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+    message(STATUS "Using Clang Compiler")
+    #TODO
+elseif (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+    message(STATUS "Using MSVC Compiler")
+    #TODO
+endif()
+
 if(WIN32)
     set(X_RESOURCES "./")
 elseif(APPLE)
