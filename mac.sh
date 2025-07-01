@@ -20,7 +20,7 @@ function make_init
     
     # TODO!!!
     # mb Check macos/clang
-    if [[ "$X_QT_VERSION" == "5.15.2" ]]; then
+    if [[ "$X_QT_VERSION" == "5.*" ]]; then
     	export X_ARCHITECTURE="x86_64"
     else
         export X_ARCHITECTURE=$(uname -m) # Qt6
