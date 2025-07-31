@@ -1,10 +1,10 @@
-call:%~1 "%~2" "%~3"
+call:%~1 %~2 %~3
 goto exit
 
 :check_file
     echo "Check file"
     echo %~1
-    IF EXIST "%~1" (
+    IF EXIST %~1 (
         echo "Check file:  %~1: TRUE"
     ) ELSE (
         set X_ERROR="TRUE"
