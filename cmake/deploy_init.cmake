@@ -1,3 +1,5 @@
+include_guard(GLOBAL)
+
 set(X_PROJECT_ARCH ${CMAKE_SYSTEM_PROCESSOR})
 message(STATUS CMAKE_SYSTEM_PROCESSOR: ${CMAKE_SYSTEM_PROCESSOR})
 message(STATUS X_PROJECT_ARCH: ${X_PROJECT_ARCH})
@@ -10,7 +12,10 @@ if (WIN32)
     endif()
 
     if(MSVC)
-        set(X_PROJECT_ARCH $ENV{Platform})
+        # Prefer VS Platform env when available (e.g., x64/x86)
+        if(DEFINED ENV{Platform} AND NOT "$ENV{Platform}" STREQUAL "")
+            set(X_PROJECT_ARCH $ENV{Platform})
+        endif()
         if(${MSVC_VERSION} EQUAL 1800)
             set(X_PROJECT_OSNAME "winxp")
             set(X_PROJECT_ARCH "x86")
@@ -18,13 +23,15 @@ if (WIN32)
     endif()
 endif()
 if (CMAKE_SYSTEM_NAME MATCHES "Linux")
-    execute_process (
+    execute_process(
         COMMAND bash -c ". /etc/os-release; echo -n $NAME"
         OUTPUT_VARIABLE X_OS_NAME
+        OUTPUT_STRIP_TRAILING_WHITESPACE
     )
-    execute_process (
+    execute_process(
         COMMAND bash -c ". /etc/os-release; echo -n $VERSION_ID"
         OUTPUT_VARIABLE X_OS_VERSION
+        OUTPUT_STRIP_TRAILING_WHITESPACE
     )
 
     set(X_PROJECT_OSNAME ${X_OS_NAME}_${X_OS_VERSION})
@@ -33,28 +40,12 @@ if (CMAKE_SYSTEM_NAME MATCHES "Linux")
     message(STATUS X_PROJECT_OSNAME: ${X_PROJECT_OSNAME})
 
     if (EXISTS "/etc/debian_version")
-        file (STRINGS "/etc/debian_version" X_DEBIAN_VERSION)
-        message(STATUS "X_DEBIAN_VERSION: ${X_DEBIAN_VERSION}")
-        if (X_DEBIAN_VERSION MATCHES "squeeze")
-            set(X_DEBIAN_VERSION "6")
-        elseif (X_DEBIAN_VERSION MATCHES "squeeze")
-            set(X_DEBIAN_VERSION "7")
-        elseif (X_DEBIAN_VERSION MATCHES "squeeze")
-            set(X_DEBIAN_VERSION "8")
-        elseif (X_DEBIAN_VERSION MATCHES "squeeze")
-            set(X_DEBIAN_VERSION "9")
-        elseif (X_DEBIAN_VERSION MATCHES "squeeze")
-            set(X_DEBIAN_VERSION "10")
-        elseif (X_DEBIAN_VERSION MATCHES "squeeze")
-            set(X_DEBIAN_VERSION "11")
-        elseif (X_DEBIAN_VERSION MATCHES "bookworm")
-            set(X_DEBIAN_VERSION "12")
-        else()
-            set(X_DEBIAN_VERSION "11")
-        endif()
-
-        set(X_DEBIAN_VERSION ${X_DEBIAN_VERSION})
-
+        # Best-effort: extract numeric version or codename from os-release
+        execute_process(
+            COMMAND bash -c ". /etc/os-release; echo -n ${VERSION_CODENAME:-$VERSION_ID}"
+            OUTPUT_VARIABLE X_DEBIAN_VERSION
+            OUTPUT_STRIP_TRAILING_WHITESPACE
+        )
         message(STATUS "X_DEBIAN_VERSION: ${X_DEBIAN_VERSION}")
         message(STATUS "CMAKE_SYSTEM_NAME: ${CMAKE_SYSTEM_NAME}")
     endif()
@@ -62,12 +53,16 @@ endif()
 
 if(APPLE)
     set(X_PROJECT_OSNAME "macOS")
-    set (CMAKE_OSX_ARCHITECTURES x86_64) # TODO make option
-    set (X_PROJECT_ARCH x86_64)
+    if(NOT DEFINED CMAKE_OSX_ARCHITECTURES)
+        set (CMAKE_OSX_ARCHITECTURES x86_64) # TODO make option
+    endif()
+    if(NOT DEFINED X_PROJECT_ARCH)
+        set (X_PROJECT_ARCH x86_64)
+    endif()
     add_compile_options(-Wno-deprecated-declarations)
     add_compile_options(-Wno-switch)
     set(X_MACOS_ICON "${PROJECT_SOURCE_DIR}/../res/main.icns")
-    set_source_files_properties(${APP_ICON_MACOSX} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
+    set_source_files_properties(${X_MACOS_ICON} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
 endif()
 
 configure_file("${PROJECT_SOURCE_DIR}/../LICENSE" "${PROJECT_SOURCE_DIR}/../res/license.txt" @ONLY)
@@ -110,6 +105,7 @@ if (CMAKE_SYSTEM_NAME MATCHES "Linux")
     endif()
 
     set(CPACK_SOURCE_GENERATOR "TGZ;DEB")
+    set(CPACK_GENERATOR "DEB;TGZ")
     set(CPACK_DEBIAN_PACKAGE_MAINTAINER ${X_MAINTAINER})
     set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}_${CPACK_PACKAGE_VERSION}_${X_PROJECT_OSNAME}_${X_PROJECT_ARCH}")
     set(CPACK_DEBIAN_PACKAGE_NAME "${CPACK_PACKAGE_NAME}_${CPACK_PACKAGE_VERSION}_${X_PROJECT_OSNAME}_${X_DEB_ARCH}")
