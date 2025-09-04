@@ -84,36 +84,57 @@ function create_deb_app_dir
 
 function create_deb_control
 {
+    # Compute Installed-Size in KiB excluding DEBIAN control dir (Debian policy)
+    control_file="$1"
+    build_dir="$X_SOURCE_PATH/release/$X_BUILD_NAME"
+    debian_dir="$build_dir/DEBIAN"
+
+    size_total=0
+    size_debian=0
+    if [ -d "$build_dir" ]; then
+        size_total=$(du -sk "$build_dir" | awk '{print $1}')
+        if [ -d "$debian_dir" ]; then
+            size_debian=$(du -sk "$debian_dir" | awk '{print $1}')
+        fi
+    fi
+    size_installed=$(( size_total - size_debian ))
+    if [ "$size_installed" -lt 0 ] 2>/dev/null; then
+        size_installed=0
+    fi
+
     {
         if [ -n "$X_PACKAGENAME" ]; then
-            echo "Package: $X_PACKAGENAME"
+            printf 'Package: %s\n' "$X_PACKAGENAME"
         fi
         if [ -n "$X_RELEASE_VERSION" ]; then
-            echo "Version: $X_RELEASE_VERSION"
+            printf 'Version: %s\n' "$X_RELEASE_VERSION"
         fi
         if [ -n "$X_PRIORITY" ]; then
-            echo "Priority: $X_PRIORITY"
+            printf 'Priority: %s\n' "$X_PRIORITY"
         fi
         if [ -n "$X_SECTION" ]; then
-            echo "Section: $X_SECTION"
+            printf 'Section: %s\n' "$X_SECTION"
         fi
         if [ -n "$X_ARCHITECTURE" ]; then
-            echo "Architecture: $X_ARCHITECTURE"
+            printf 'Architecture: %s\n' "$X_ARCHITECTURE"
         fi
         if [ -n "$X_MAINTAINER" ]; then
-            echo "Maintainer: $X_MAINTAINER"
+            printf 'Maintainer: %s\n' "$X_MAINTAINER"
         fi
-        echo "Installed-Size: $(du -sk --exclude $X_SOURCE_PATH/release/$X_BUILD_NAME/DEBIAN $X_SOURCE_PATH/release/$X_BUILD_NAME | cut -f 1)"
+        printf 'Installed-Size: %s\n' "$size_installed"
         if [ -n "$X_DEPENDS" ]; then
-            echo "Depends: $X_DEPENDS"
+            printf 'Depends: %s\n' "$X_DEPENDS"
         fi
         if [ -n "$X_HOMEPAGE" ]; then
-            echo "Homepage: $X_HOMEPAGE"
+            printf 'Homepage: %s\n' "$X_HOMEPAGE"
         fi
         if [ -n "$X_DESCRIPTION" ]; then
-            echo "Description: $X_DESCRIPTION"
+            desc="$X_DESCRIPTION"
+            # Collapse any newlines to spaces to keep single-line short description
+            desc=${desc//$'\n'/ }
+            printf 'Description: %s\n' "$desc"
         fi
-    } > $1
+    } > "$control_file"
 }
 
 function create_image_app_dir
