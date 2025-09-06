@@ -40,15 +40,31 @@ if (CMAKE_SYSTEM_NAME MATCHES "Linux")
     message(STATUS X_PROJECT_OSNAME: ${X_PROJECT_OSNAME})
 
     if (EXISTS "/etc/debian_version")
-        # Best-effort: extract numeric version or codename from os-release
-        execute_process(
-            COMMAND bash -c ". /etc/os-release; echo -n ${VERSION_CODENAME:-$VERSION_ID}"
-            OUTPUT_VARIABLE X_DEBIAN_VERSION
-            OUTPUT_STRIP_TRAILING_WHITESPACE
-        )
-        message(STATUS "X_DEBIAN_VERSION: ${X_DEBIAN_VERSION}")
-        message(STATUS "CMAKE_SYSTEM_NAME: ${CMAKE_SYSTEM_NAME}")
-    endif()
+            file (STRINGS "/etc/debian_version" X_DEBIAN_VERSION)
+            message(STATUS "X_DEBIAN_VERSION: ${X_DEBIAN_VERSION}")
+            if (X_DEBIAN_VERSION MATCHES "squeeze")
+                set(X_DEBIAN_VERSION "6")
+            elseif (X_DEBIAN_VERSION MATCHES "squeeze")
+                set(X_DEBIAN_VERSION "7")
+            elseif (X_DEBIAN_VERSION MATCHES "squeeze")
+                set(X_DEBIAN_VERSION "8")
+            elseif (X_DEBIAN_VERSION MATCHES "squeeze")
+                set(X_DEBIAN_VERSION "9")
+            elseif (X_DEBIAN_VERSION MATCHES "squeeze")
+                set(X_DEBIAN_VERSION "10")
+            elseif (X_DEBIAN_VERSION MATCHES "squeeze")
+                set(X_DEBIAN_VERSION "11")
+            elseif (X_DEBIAN_VERSION MATCHES "bookworm")
+                set(X_DEBIAN_VERSION "12")
+            else()
+                set(X_DEBIAN_VERSION "11")
+            endif()
+
+            set(X_DEBIAN_VERSION ${X_DEBIAN_VERSION})
+
+            message(STATUS "X_DEBIAN_VERSION: ${X_DEBIAN_VERSION}")
+            message(STATUS "CMAKE_SYSTEM_NAME: ${CMAKE_SYSTEM_NAME}")
+        endif()
 endif()
 
 if(APPLE)
