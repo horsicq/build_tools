@@ -1,4 +1,4 @@
-nclude(GNUInstallDirs)
+include(GNUInstallDirs)
 
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
