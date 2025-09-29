@@ -1,17 +1,8 @@
-include_guard(GLOBAL)
+nclude(GNUInstallDirs)
 
-include(GNUInstallDirs)
-
-# Enable Qt auto tools if not already configured
-if(NOT DEFINED CMAKE_AUTOUIC)
-    set(CMAKE_AUTOUIC ON)
-endif()
-if(NOT DEFINED CMAKE_AUTOMOC)
-    set(CMAKE_AUTOMOC ON)
-endif()
-if(NOT DEFINED CMAKE_AUTORCC)
-    set(CMAKE_AUTORCC ON)
-endif()
+set(CMAKE_AUTOUIC ON)
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
 
 # Respect existing C++ standard; default to 14 if not set
 if(NOT DEFINED CMAKE_CXX_STANDARD)
@@ -22,11 +13,9 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 if(WIN32)
     if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
-        foreach(flag_var IN ITEMS CMAKE_EXE_LINKER_FLAGS CMAKE_MODULE_LINKER_FLAGS CMAKE_SHARED_LINKER_FLAGS)
-            if(NOT ${flag_var} MATCHES "/MANIFEST:NO")
-                set(${flag_var} "${${flag_var}} /MANIFEST:NO")
-            endif()
-        endforeach()
+        set(CMAKE_EXE_LINKER_FLAGS    "${CMAKE_EXE_LINKER_FLAGS} /MANIFEST:NO")
+        set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} /MANIFEST:NO")
+        set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} /MANIFEST:NO")
     endif()
 endif()
 
