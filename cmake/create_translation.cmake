@@ -1,5 +1,3 @@
-include_guard(GLOBAL)
-
 message(STATUS "Create translation")
 
 # Determine sources/dirs for lupdate. Prefer project sources if available,
