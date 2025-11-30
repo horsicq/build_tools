@@ -4,8 +4,12 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
-set(CMAKE_CXX_STANDARD 14)
+# Respect existing C++ standard; default to 14 if not set
+if(NOT DEFINED CMAKE_CXX_STANDARD)
+    set(CMAKE_CXX_STANDARD 14)
+endif()
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
 if(WIN32)
     if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
@@ -25,14 +29,21 @@ elseif (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     message(STATUS "Using MSVC Compiler")
     #TODO
 else ()
-    message(FATAL_ERROR "Compiler: ${CMAKE_CXX_COMPILER_ID}")
+    message(WARNING "Unknown compiler: ${CMAKE_CXX_COMPILER_ID}")
 endif()
 
-if(WIN32)
-    set(X_RESOURCES "./")
-elseif(APPLE)
-    set(X_RESOURCES "./${PROJECT_NAME}.app/Contents/Resources")
-else()
-    set(X_RESOURCES ${CMAKE_INSTALL_LIBDIR}/${PROJECT_NAME})
+# Suppress MSVC "unsafe" CRT deprecation warnings in legacy code paths
+if(MSVC)
+    add_compile_definitions(_CRT_SECURE_NO_WARNINGS _SCL_SECURE_NO_WARNINGS _CRT_NONSTDC_NO_DEPRECATE)
+endif()
+
+if(NOT DEFINED X_RESOURCES)
+    if(WIN32)
+        set(X_RESOURCES "./")
+    elseif(APPLE)
+        set(X_RESOURCES "./${PROJECT_NAME}.app/Contents/Resources")
+    else()
+        set(X_RESOURCES ${CMAKE_INSTALL_LIBDIR}/${PROJECT_NAME})
+    endif()
 endif()
 
