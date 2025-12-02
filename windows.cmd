@@ -66,18 +66,36 @@ goto exit
     
 :make_build
     IF EXIST "Makefile" (
-        %X_MAKE% clean
+        if defined JOM_PATH (
+            %JOM_PATH% -j %BUILD_JOBS% clean
+        ) else (
+            %X_MAKE% clean
+        )
     )
     %QMAKE_PATH% "%~1" -r -spec %X_QMAKE_SPEC% "CONFIG+=release"
-    %X_MAKE%
+    if defined JOM_PATH (
+        echo Using jom with %BUILD_JOBS% parallel jobs
+        %JOM_PATH% -j %BUILD_JOBS%
+    ) else (
+        echo Using nmake (single-threaded)
+        %X_MAKE%
+    )
     goto:eof
     
 :make_build_pdb
     IF EXIST "Makefile" (
-        %X_MAKE% clean
+        if defined JOM_PATH (
+            %JOM_PATH% -j %BUILD_JOBS% clean
+        ) else (
+            %X_MAKE% clean
+        )
     )
     %QMAKE_PATH% "%~1" -r -spec %X_QMAKE_SPEC% "CONFIG+=release" "DEFINES+=CREATE_PDB"
-    %X_MAKE%
+    if defined JOM_PATH (
+        %JOM_PATH% -j %BUILD_JOBS%
+    ) else (
+        %X_MAKE%
+    )
     goto:eof
     
 :make_translate
