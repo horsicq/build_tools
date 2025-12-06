@@ -67,13 +67,17 @@ goto exit
 :make_build
     IF EXIST "Makefile" (
         if defined JOM_PATH (
-            %JOM_PATH% -j %BUILD_JOBS% clean
+            "%JOM_PATH%" -j %BUILD_JOBS% clean
         ) else (
-            %X_MAKE% clean
+            "%X_MAKE%" clean
         )
     )
-    %QMAKE_PATH% "%~1" -r -spec %X_QMAKE_SPEC% "CONFIG+=release"
-    if defined JOM_PATH (
+    if "%~2"=="" (
+        "%QMAKE_PATH%" "%~1" -r -spec %X_QMAKE_SPEC% "CONFIG+=release"
+    ) else (
+        "%QMAKE_PATH%" "%~1" -r -spec %X_QMAKE_SPEC% "CONFIG+=release" "DEFINES+=%~2"
+    )
+	if defined JOM_PATH (
         echo Using jom with %BUILD_JOBS% parallel jobs
         %JOM_PATH% -j %BUILD_JOBS%
     ) else (
