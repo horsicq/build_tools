@@ -1,5 +1,9 @@
 message("Init translation")
 
+# Ensure translation directory exists
+file(MAKE_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/translation)
+
+# Use absolute paths for translation files
 set(TS_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/translation/${X_ORIGINAL_FILENAME}_ar_AR.ts
     ${CMAKE_CURRENT_SOURCE_DIR}/translation/${X_ORIGINAL_FILENAME}_bn_BN.ts
