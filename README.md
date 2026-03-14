@@ -61,7 +61,7 @@ Install Qt 5.15.2 for Windows https://www.qt.io/download (Downloads for open sou
 ![alt text](https://github.com/horsicq/build_tools/blob/master/images/Windows_Qt5_15_1.png "Qt 5.15.1")
 
 Install Qt 6.X for Windows https://www.qt.io/download (Downloads for open source users)
-
-- MSVC 2026 64-bit
+Select in the installer following:
+- MSVC 2022 64-bit
 - Qt5Compat 
 - Qt Script
