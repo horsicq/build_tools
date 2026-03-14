@@ -4,7 +4,7 @@ Visual Studio Community 2013 with Update 5: https://my.visualstudio.com/Download
 
 Visual Studio Community 2017 (version 15.9): https://my.visualstudio.com/Downloads?q=visual%20studio%202017&wt.mc_id=o~msft~vscom~older-downloads (Login with GitHub)
 
-Visual Studio Community 2019: https://my.visualstudio.com/downloads (Login with GitHub)
+Visual Studio Community 2026: https://visualstudio.microsoft.com
 
 7-Zip: https://www.7-zip.org/
 
@@ -59,3 +59,9 @@ Install Qt 5.15.2 for Windows https://www.qt.io/download (Downloads for open sou
 - Qt Script
 
 ![alt text](https://github.com/horsicq/build_tools/blob/master/images/Windows_Qt5_15_1.png "Qt 5.15.1")
+
+Install Qt 6.X for Windows https://www.qt.io/download (Downloads for open source users)
+
+- MSVC 2026 64-bit
+- Qt5Compat 
+- Qt Script
