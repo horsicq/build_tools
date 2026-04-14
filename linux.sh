@@ -32,6 +32,9 @@ function make_init
     export X_QMAKE_SPEC=$($QMAKE_PATH -query QMAKE_SPEC)
     mkdir -p "$X_SOURCE_PATH/release"
     mkdir -p "$X_SOURCE_PATH/release/$X_BUILD_NAME"
+    if [[ "$X_BUILD_NAME" == *portable* ]]; then
+        touch "$X_SOURCE_PATH/release/$X_BUILD_NAME/portable"
+    fi
     
     # get DEBIAN version
     # TODO other Linuxes

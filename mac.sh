@@ -28,6 +28,9 @@ function make_init
     
     mkdir -p "$X_SOURCE_PATH/release"
     mkdir -p "$X_SOURCE_PATH/release/$X_BUILD_NAME"
+    if [[ "$X_BUILD_NAME" == *portable* ]]; then
+        touch "$X_SOURCE_PATH/release/$X_BUILD_NAME/portable"
+    fi
     
     cp -f $X_SOURCE_PATH/build_tools/build.pri $X_SOURCE_PATH/
 }

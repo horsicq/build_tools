@@ -47,6 +47,9 @@ goto exit
     mkdir %X_SOURCE_PATH%\release
     mkdir %X_SOURCE_PATH%\release\%X_BUILD_NAME%
     mkdir %X_SOURCE_PATH%\build\release
+    IF NOT "%X_BUILD_NAME%" == "%X_BUILD_NAME:portable=%" (
+        type NUL > "%X_SOURCE_PATH%\release\%X_BUILD_NAME%\portable"
+    )
     
     if exist %X_SOURCE_PATH%\gui_source\ (
         xcopy %X_SOURCE_PATH%\build_tools\windows.manifest.xml %X_SOURCE_PATH%\gui_source\ /Y
