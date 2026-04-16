@@ -199,9 +199,8 @@ goto exit
     cd %X_SOURCE_PATH%\release
     set X_ZIP_NAME=%X_BUILD_NAME%_%X_BUILD_PREFIX%_portable_%X_RELEASE_VERSION%_%X_ARCHITECTURE%
     if exist %X_ZIP_NAME%.zip del %X_ZIP_NAME%.zip
-    cd %X_SOURCE_PATH%\release\%X_BUILD_NAME%\
-    
-    %SEVENZIP_PATH% a %X_SOURCE_PATH%\release\%X_ZIP_NAME%.zip *
+
+    %SEVENZIP_PATH% a %X_SOURCE_PATH%\release\%X_ZIP_NAME%.zip %X_BUILD_NAME%\
     set X_ZIP_NAME=
     cd %X_SOURCE_PATH%
     IF [%INNOSETUP_PATH%] == [] goto make_release_end
