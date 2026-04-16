@@ -47,7 +47,7 @@ goto exit
     mkdir %X_SOURCE_PATH%\release
     mkdir %X_SOURCE_PATH%\release\%X_BUILD_NAME%
     mkdir %X_SOURCE_PATH%\build\release
-    IF NOT "%X_BUILD_NAME%" == "%X_BUILD_NAME:portable=%" (
+    IF "%X_PORTABLE%"=="1" (
         type NUL > "%X_SOURCE_PATH%\release\%X_BUILD_NAME%\portable"
     )
     
