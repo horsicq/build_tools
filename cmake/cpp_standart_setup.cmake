@@ -1,5 +1,9 @@
 include(GNUInstallDirs)
 
+if(WIN32)
+    add_definitions(-DNOMINMAX)
+endif()
+
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
@@ -39,9 +43,9 @@ endif()
 
 if(NOT DEFINED X_RESOURCES)
     if(WIN32)
-        set(X_RESOURCES "./")
+        set(X_RESOURCES ".")
     elseif(APPLE)
-        set(X_RESOURCES "./${PROJECT_NAME}.app/Contents/Resources")
+        set(X_RESOURCES "${PROJECT_NAME}.app/Contents/Resources")
     else()
         set(X_RESOURCES ${CMAKE_INSTALL_LIBDIR}/${PROJECT_NAME})
     endif()
