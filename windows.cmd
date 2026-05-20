@@ -9,9 +9,8 @@ goto exit
     ) ELSE (
         set X_ERROR="TRUE"
         echo "Cannot find file: %~1"
-        exit /b 1
     )
-    exit /b 0
+    goto:eof
 
 :make_init
     echo "init"
@@ -19,30 +18,20 @@ goto exit
 :msvc_env
     IF [%VSVARS_PATH%] == [] goto mingw_env
     call %VSVARS_PATH%
-    if errorlevel 1 (
-        set X_ERROR="TRUE"
-        exit /b 1
-    )
     set X_MAKE=nmake
     IF [%Platform%] == [] goto qmake_env
     set X_ARCHITECTURE=%Platform%
     goto qmake_env
 :mingw_env
     rem TODO platform
-    IF [%MINGW_PATH%] == [] (
-        set X_ERROR="TRUE"
-        echo "Please set MSVC or MinGW"
-        exit /b 1
-    )
+    IF [%MINGW_PATH%] == [] goto qmake_env
     set PATH=%MINGW_PATH%
     set X_MAKE=mingw32-make
     goto qmake_env
+    set X_ERROR="TRUE"
+    echo "Please set MSVC or MinGW"
 :qmake_env
     %QMAKE_PATH% -query QT_VERSION > qt_tmp.txt
-    if errorlevel 1 (
-        set X_ERROR="TRUE"
-        exit /b 1
-    )
     set /p X_QT_VERSION=<qt_tmp.txt
     %QMAKE_PATH% -query QT_INSTALL_BINS > qt_tmp.txt
     set /p X_QT_INSTALL_BINS=<qt_tmp.txt
@@ -76,7 +65,7 @@ goto exit
     
     xcopy %X_SOURCE_PATH%\build_tools\build.pri %X_SOURCE_PATH%\ /Y
     
-    exit /b 0
+    goto:eof
     
 :make_build
     IF EXIST "Makefile" (
@@ -87,10 +76,6 @@ goto exit
         )
     )
     %QMAKE_PATH% "%~1" -r -spec %X_QMAKE_SPEC% "CONFIG+=release"
-    if errorlevel 1 (
-        set X_ERROR="TRUE"
-        exit /b 1
-    )
     if defined JOM_PATH (
         echo Using jom with %BUILD_JOBS% parallel jobs
         %JOM_PATH% -j %BUILD_JOBS%
@@ -98,11 +83,7 @@ goto exit
         echo Using nmake (single-threaded)
         %X_MAKE%
     )
-    if errorlevel 1 (
-        set X_ERROR="TRUE"
-        exit /b 1
-    )
-    exit /b 0
+    goto:eof
     
 :make_build_pdb
     IF EXIST "Makefile" (
@@ -113,20 +94,12 @@ goto exit
         )
     )
     %QMAKE_PATH% "%~1" -r -spec %X_QMAKE_SPEC% "CONFIG+=release" "DEFINES+=CREATE_PDB"
-    if errorlevel 1 (
-        set X_ERROR="TRUE"
-        exit /b 1
-    )
     if defined JOM_PATH (
         %JOM_PATH% -j %BUILD_JOBS%
     ) else (
         %X_MAKE%
     )
-    if errorlevel 1 (
-        set X_ERROR="TRUE"
-        exit /b 1
-    )
-    exit /b 0
+    goto:eof
     
 :make_translate
     %X_QT_INSTALL_BINS%\lupdate.exe "%~1"
@@ -228,19 +201,11 @@ goto exit
     if exist %X_ZIP_NAME%.zip del %X_ZIP_NAME%.zip
 
     %SEVENZIP_PATH% a %X_SOURCE_PATH%\release\%X_ZIP_NAME%.zip %X_BUILD_NAME%\
-    if errorlevel 1 (
-        set X_ERROR="TRUE"
-        exit /b 1
-    )
     set X_ZIP_NAME=
     cd %X_SOURCE_PATH%
     IF [%INNOSETUP_PATH%] == [] goto make_release_end
     if not exist "%INNOSETUP_PATH%\install.iss" goto make_release_end
     %INNOSETUP_PATH% install.iss
-    if errorlevel 1 (
-        set X_ERROR="TRUE"
-        exit /b 1
-    )
     if exist "%X_SOURCE_PATH%\release\%X_BUILD_NAME%_%X_BUILD_PREFIX%_install_%X_RELEASE_VERSION%.exe" del "%X_SOURCE_PATH%\release\%X_BUILD_NAME%_%X_BUILD_PREFIX%_install_%X_RELEASE_VERSION%.exe"
     ren "%X_SOURCE_PATH%\release\install.exe" "%X_BUILD_NAME%_%X_BUILD_PREFIX%_install_%X_RELEASE_VERSION%.exe"
 :make_release_end
@@ -248,6 +213,7 @@ goto exit
     goto:eof 
     
 :make_clear
+    set X_ERROR=
     set X_QT_VERSION=
     set X_QT_INSTALL_BINS=
     set X_QT_INSTALL_PLUGINS=
@@ -255,7 +221,7 @@ goto exit
     
     rmdir /s /q %X_SOURCE_PATH%\release\%X_BUILD_NAME%
     
-    exit /b 0
+    goto:eof
     
 :exit
     exit /b
