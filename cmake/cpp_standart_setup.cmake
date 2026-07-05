@@ -39,6 +39,12 @@ endif()
 # Suppress MSVC "unsafe" CRT deprecation warnings in legacy code paths
 if(MSVC)
     add_compile_definitions(_CRT_SECURE_NO_WARNINGS _SCL_SECURE_NO_WARNINGS _CRT_NONSTDC_NO_DEPRECATE)
+
+    # Work around QTBUG-90568: Qt 5.15's qvector.h uses stdext::checked_array_iterator
+    # without including <iterator> itself. Older MSVC toolchains pulled that header in
+    # transitively; newer ones (as shipped on current CI images) don't, causing
+    # "stdext is not a class or namespace name" (fixed upstream only in Qt 5.15.3+).
+    add_compile_options(/FI"iterator")
 endif()
 
 if(NOT DEFINED X_RESOURCES)
