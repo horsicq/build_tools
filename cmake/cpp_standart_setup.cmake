@@ -26,7 +26,7 @@ endif()
 if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
     message(STATUS "Using GNU Compiler")
     #TODO
-elseif (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+elseif (CMAKE_CXX_COMPILER_ID STREQUAL "Clang" OR CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang")
     message(STATUS "Using Clang Compiler")
     #TODO
 elseif (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
