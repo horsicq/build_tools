@@ -6,4 +6,3 @@ make
 cpack
 cd ..
 cp -Rf tmp_build/packages .
-
