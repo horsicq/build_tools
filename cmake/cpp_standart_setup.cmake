@@ -56,4 +56,3 @@ if(NOT DEFINED X_RESOURCES)
         set(X_RESOURCES ${CMAKE_INSTALL_LIBDIR}/${PROJECT_NAME})
     endif()
 endif()
-
