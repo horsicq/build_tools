@@ -44,7 +44,9 @@ if(MSVC)
     # without including <iterator> itself. Older MSVC toolchains pulled that header in
     # transitively; newer ones (as shipped on current CI images) don't, causing
     # "stdext is not a class or namespace name" (fixed upstream only in Qt 5.15.3+).
-    add_compile_options(/FIiterator)
+    # C++ only: <iterator> is not a C header, so forcing it into C sources (the bundled
+    # zlib/lzma/bzip2) fails with "STL1003: Unexpected compiler, expected C++ compiler".
+    add_compile_options($<$<COMPILE_LANGUAGE:CXX>:/FIiterator>)
 endif()
 
 if(NOT DEFINED X_RESOURCES)
