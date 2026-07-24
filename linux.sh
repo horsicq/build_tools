@@ -171,12 +171,6 @@ function make_deb
     dpkg -b $X_SOURCE_PATH/release/$X_BUILD_NAME
 }
 
-function make_rpm
-{
-    # TODO
-    echo "make_rpm"
-}
-
 function make_targz
 {
     tar -cvf $2.tar $1
