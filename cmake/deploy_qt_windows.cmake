@@ -164,6 +164,13 @@ if(WIN32)
         _deploy_qt_windows_install_files("${_deploy_qt_windows_prefix}" "."
             "bin/Qt6Network.dll"
         )
+        # TLS backend plugin is required for HTTPS. qschannelbackend uses native
+        # Windows TLS (no OpenSSL); the openssl/certonly backends are optional.
+        _deploy_qt_windows_install_files("${_deploy_qt_windows_prefix}" "tls"
+            "plugins/tls/qschannelbackend.dll"
+            "plugins/tls/qopensslbackend.dll"
+            "plugins/tls/qcertonlybackend.dll"
+        )
     endif()
 
     if(NOT "${Qt6Qml_VERSION}" STREQUAL "")
