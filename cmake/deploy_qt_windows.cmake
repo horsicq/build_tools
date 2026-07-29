@@ -35,6 +35,7 @@ if(WIN32)
         )
         _deploy_qt_windows_install_files("${_deploy_qt_windows_prefix}" "platforms"
             "plugins/platforms/qwindows.dll"
+            "plugins/platforms/qoffscreen.dll"
         )
         _deploy_qt_windows_install_files("${_deploy_qt_windows_prefix}" "imageformats"
             "plugins/imageformats/qgif.dll"
@@ -113,6 +114,7 @@ if(WIN32)
         )
         _deploy_qt_windows_install_files("${_deploy_qt_windows_prefix}" "platforms"
             "plugins/platforms/qwindows.dll"
+            "plugins/platforms/qoffscreen.dll"
         )
         _deploy_qt_windows_install_files("${_deploy_qt_windows_prefix}" "imageformats"
             "plugins/imageformats/qgif.dll"

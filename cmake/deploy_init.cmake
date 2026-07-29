@@ -66,21 +66,26 @@ if (WIN32)
 endif()
 message(STATUS X_PROJECT_ARCH: ${X_PROJECT_ARCH})
 if (CMAKE_SYSTEM_NAME MATCHES "Linux")
-    execute_process(
-        COMMAND bash -c ". /etc/os-release; echo -n $NAME"
-        OUTPUT_VARIABLE X_OS_NAME
-        OUTPUT_STRIP_TRAILING_WHITESPACE
-    )
-    execute_process(
-        COMMAND bash -c ". /etc/os-release; echo -n $VERSION_ID"
-        OUTPUT_VARIABLE X_OS_VERSION
-        OUTPUT_STRIP_TRAILING_WHITESPACE
-    )
-
-    set(X_PROJECT_OSNAME ${X_OS_NAME}_${X_OS_VERSION})
+    # NAME is a human-readable label and commonly contains spaces or a slash
+    # (for example "Debian GNU/Linux"). Package filenames use the stable ID
+    # field and a strictly bounded filename-safe VERSION_ID instead.
+    set(_x_linux_package_label_helper
+        "${CMAKE_CURRENT_LIST_DIR}/linux_package_os_label.cmake")
+    if(NOT EXISTS "${_x_linux_package_label_helper}")
+        message(FATAL_ERROR
+            "Linux package-label helper is missing: "
+            "${_x_linux_package_label_helper}")
+    endif()
+    include("${_x_linux_package_label_helper}")
+    x_get_linux_package_os_label(
+        "/etc/os-release"
+        X_PROJECT_OSNAME
+        X_OS_NAME
+        X_OS_VERSION)
     message(STATUS X_OS_NAME: ${X_OS_NAME})
     message(STATUS X_OS_VERSION: ${X_OS_VERSION})
     message(STATUS X_PROJECT_OSNAME: ${X_PROJECT_OSNAME})
+    unset(_x_linux_package_label_helper)
 
     if (EXISTS "/etc/debian_version")
             file (STRINGS "/etc/debian_version" X_DEBIAN_VERSION)
@@ -114,11 +119,31 @@ endif()
 
 if(APPLE)
     set(X_PROJECT_OSNAME "macOS")
-    if(NOT DEFINED CMAKE_OSX_ARCHITECTURES)
-        set (CMAKE_OSX_ARCHITECTURES x86_64) # TODO make option
-    endif()
-    if(NOT DEFINED X_PROJECT_ARCH)
-        set (X_PROJECT_ARCH x86_64)
+    # CMAKE_OSX_ARCHITECTURES affects compiler selection and must be supplied
+    # before project() when cross-building. Do not silently force x86_64 here:
+    # doing so produced x86_64 binaries labelled as arm64 on Apple Silicon.
+    if(DEFINED CMAKE_OSX_ARCHITECTURES
+       AND NOT "${CMAKE_OSX_ARCHITECTURES}" STREQUAL "")
+        set(_x_macos_architectures ${CMAKE_OSX_ARCHITECTURES})
+        list(REMOVE_DUPLICATES _x_macos_architectures)
+        list(LENGTH _x_macos_architectures _x_macos_architecture_count)
+        list(FIND _x_macos_architectures "x86_64" _x_macos_x86_64_index)
+        list(FIND _x_macos_architectures "arm64" _x_macos_arm64_index)
+        if(_x_macos_architecture_count EQUAL 2
+           AND NOT _x_macos_x86_64_index EQUAL -1
+           AND NOT _x_macos_arm64_index EQUAL -1)
+            set(X_PROJECT_ARCH "universal2")
+        elseif(_x_macos_architecture_count EQUAL 1)
+            list(GET _x_macos_architectures 0 X_PROJECT_ARCH)
+        else()
+            list(JOIN _x_macos_architectures "-" X_PROJECT_ARCH)
+        endif()
+        unset(_x_macos_architectures)
+        unset(_x_macos_architecture_count)
+        unset(_x_macos_x86_64_index)
+        unset(_x_macos_arm64_index)
+    else()
+        set(X_PROJECT_ARCH "${CMAKE_SYSTEM_PROCESSOR}")
     endif()
     add_compile_options(-Wno-deprecated-declarations)
     add_compile_options(-Wno-switch)
@@ -144,7 +169,9 @@ set(CPACK_PACKAGE_DESCRIPTION ${X_DESCRIPTION})
 set(CPACK_PACKAGE_HOMEPAGE_URL ${X_HOMEPAGE})
 
 if (WIN32)
-    set(CPACK_SOURCE_GENERATOR "ZIP")
+    if(NOT DEFINED CPACK_SOURCE_GENERATOR)
+        set(CPACK_SOURCE_GENERATOR "ZIP")
+    endif()
     set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}_${X_PROJECT_OSNAME}_portable_${CPACK_PACKAGE_VERSION}_${X_PROJECT_ARCH}")
 endif()
 
@@ -164,12 +191,29 @@ if (CMAKE_SYSTEM_NAME MATCHES "Linux")
         set(X_DEB_ARCH "ppc64el")
     endif()
 
-    set(CPACK_SOURCE_GENERATOR "TGZ;DEB")
+    if(NOT DEFINED CPACK_SOURCE_GENERATOR)
+        set(CPACK_SOURCE_GENERATOR "TGZ;DEB")
+    endif()
     set(CPACK_GENERATOR "DEB;TGZ")
     set(CPACK_DEBIAN_PACKAGE_MAINTAINER ${X_MAINTAINER})
     set(CPACK_DEBIAN_PACKAGE_ARCHITECTURE "${X_DEB_ARCH}")
     set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}_${CPACK_PACKAGE_VERSION}_${X_PROJECT_OSNAME}_${X_DEB_ARCH}")
-    set(CPACK_DEBIAN_PACKAGE_NAME "${CPACK_PACKAGE_NAME}_${CPACK_PACKAGE_VERSION}_${X_PROJECT_OSNAME}_${X_DEB_ARCH}")
+    # Debian's control Package field is a lowercase package identifier, not a
+    # display name or output filename. Versions, OS labels, spaces and
+    # underscores make the generated .deb invalid.
+    string(TOLOWER "${CPACK_PACKAGE_NAME}" _x_debian_package_name)
+    string(REGEX REPLACE "[^a-z0-9+.-]+" "-"
+        _x_debian_package_name "${_x_debian_package_name}")
+    string(REGEX REPLACE "^-+|-+$" ""
+        _x_debian_package_name "${_x_debian_package_name}")
+    if("${_x_debian_package_name}" STREQUAL ""
+       OR NOT _x_debian_package_name MATCHES "^[a-z0-9][a-z0-9+.-]+$")
+        message(FATAL_ERROR
+            "Cannot derive a valid Debian package name from "
+            "'${CPACK_PACKAGE_NAME}'")
+    endif()
+    set(CPACK_DEBIAN_PACKAGE_NAME "${_x_debian_package_name}")
+    unset(_x_debian_package_name)
     message(STATUS CPACK_DEBIAN_PACKAGE_ARCHITECTURE: ${CPACK_DEBIAN_PACKAGE_ARCHITECTURE})
     message(STATUS CPACK_DEBIAN_PACKAGE_NAME: ${CPACK_DEBIAN_PACKAGE_NAME})
     #set(CPACK_DEBIAN_PACKAGE_SECTION ${X_SECTION})
