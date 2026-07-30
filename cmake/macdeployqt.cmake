@@ -7,5 +7,11 @@ if(MACDEPLOYQT)
         COMMENT "Macdeployqt the executable"
     )
 else()
-    message("macdeployqt not found. Please install Qt tools")
+    if(XVMPUNPACKER_RELEASE_BUILD)
+        message(FATAL_ERROR
+            "macdeployqt is required for an XVMPUnpacker release build")
+    else()
+        message(WARNING
+            "macdeployqt not found; the build-tree app is not deployable")
+    endif()
 endif()
