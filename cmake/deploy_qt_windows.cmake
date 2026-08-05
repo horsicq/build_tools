@@ -28,6 +28,12 @@ if(WIN32)
         )
     endif()
 
+    if(NOT "${Qt5Concurrent_VERSION}" STREQUAL "")
+        _deploy_qt_windows_install_files("${_deploy_qt_windows_prefix}" "."
+            "bin/Qt5Concurrent.dll"
+        )
+    endif()
+
     if(NOT "${Qt5Gui_VERSION}" STREQUAL "")
         _deploy_qt_windows_install_files("${_deploy_qt_windows_prefix}" "."
             "bin/Qt5Gui.dll"
@@ -104,6 +110,12 @@ if(WIN32)
     if(NOT "${Qt6Core_VERSION}" STREQUAL "")
         _deploy_qt_windows_install_files("${_deploy_qt_windows_prefix}" "."
             "bin/Qt6Core.dll"
+        )
+    endif()
+
+    if(NOT "${Qt6Concurrent_VERSION}" STREQUAL "")
+        _deploy_qt_windows_install_files("${_deploy_qt_windows_prefix}" "."
+            "bin/Qt6Concurrent.dll"
         )
     endif()
 
