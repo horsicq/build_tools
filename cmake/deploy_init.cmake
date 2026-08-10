@@ -176,19 +176,25 @@ if (WIN32)
 endif()
 
 if (CMAKE_SYSTEM_NAME MATCHES "Linux")
-    set(X_DEB_ARCH ${X_PROJECT_ARCH})
+    include(GNUInstallDirs)
+    if(NOT DEFINED X_DEB_ARCH OR "${X_DEB_ARCH}" STREQUAL "")
+        set(X_DEB_ARCH ${X_PROJECT_ARCH})
 
-    # Standard mappings between CMake and Debian architectures
-    if(X_PROJECT_ARCH STREQUAL "x86_64")
-        set(X_DEB_ARCH "amd64")
-    elseif(X_PROJECT_ARCH MATCHES "^i[3456]86$")
-        set(X_DEB_ARCH "i386")
-    elseif(X_PROJECT_ARCH MATCHES "^armv7")
-        set(X_DEB_ARCH "armhf")
-    elseif(X_PROJECT_ARCH STREQUAL "aarch64")
-        set(X_DEB_ARCH "arm64")
-    elseif(X_PROJECT_ARCH STREQUAL "ppc64le")
-        set(X_DEB_ARCH "ppc64el")
+        # Standard mappings between CMake and Debian architectures.  A release
+        # recipe may instead provide the native architecture reported by dpkg;
+        # do not replace that package-manager-owned value with a processor
+        # spelling inferred by CMake.
+        if(X_PROJECT_ARCH STREQUAL "x86_64")
+            set(X_DEB_ARCH "amd64")
+        elseif(X_PROJECT_ARCH MATCHES "^i[3456]86$")
+            set(X_DEB_ARCH "i386")
+        elseif(X_PROJECT_ARCH MATCHES "^armv7")
+            set(X_DEB_ARCH "armhf")
+        elseif(X_PROJECT_ARCH STREQUAL "aarch64")
+            set(X_DEB_ARCH "arm64")
+        elseif(X_PROJECT_ARCH STREQUAL "ppc64le")
+            set(X_DEB_ARCH "ppc64el")
+        endif()
     endif()
 
     if(NOT DEFINED CPACK_SOURCE_GENERATOR)
@@ -218,54 +224,83 @@ if (CMAKE_SYSTEM_NAME MATCHES "Linux")
     message(STATUS CPACK_DEBIAN_PACKAGE_NAME: ${CPACK_DEBIAN_PACKAGE_NAME})
     #set(CPACK_DEBIAN_PACKAGE_SECTION ${X_SECTION})
 
-    # Qt5
-    if (NOT "${Qt5Core_VERSION}" STREQUAL "")
-        list(APPEND X_DEBIAN_PACKAGE_DEPENDS "libqt5core5a")
-        list(APPEND X_DEBIAN_PACKAGE_DEPENDS "libqt5dbus5") # TODO Check
-    endif()
-    if (NOT "${Qt5Gui_VERSION}" STREQUAL "")
-        list(APPEND X_DEBIAN_PACKAGE_DEPENDS "libqt5gui5")
-    endif()
-    if (NOT "${Qt5Widgets_VERSION}" STREQUAL "")
-        list(APPEND X_DEBIAN_PACKAGE_DEPENDS "libqt5widgets5")
-    endif()
-    if (NOT "${Qt5Svg_VERSION}" STREQUAL "")
-        list(APPEND X_DEBIAN_PACKAGE_DEPENDS "libqt5svg5")
-    endif()
-    if (NOT "${Qt5Sql_VERSION}" STREQUAL "")
-        list(APPEND X_DEBIAN_PACKAGE_DEPENDS "libqt5sql5")
-    endif()
-    if (NOT "${Qt5OpenGL_VERSION}" STREQUAL "")
-        list(APPEND X_DEBIAN_PACKAGE_DEPENDS "libqt5opengl5")
-    endif()
-    if (NOT "${Qt5Network_VERSION}" STREQUAL "")
-        list(APPEND X_DEBIAN_PACKAGE_DEPENDS "libqt5network5")
-    endif()
-    if (NOT "${Qt5Script_VERSION}" STREQUAL "")
-        list(APPEND X_DEBIAN_PACKAGE_DEPENDS "libqt5script5")
-    endif()
-    if (NOT "${Qt5ScriptTools_VERSION}" STREQUAL "")
-        list(APPEND X_DEBIAN_PACKAGE_DEPENDS "libqt5scripttools5")
-    endif()
-    # Qt6
-    if (NOT "${Qt6Core_VERSION}" STREQUAL "")
-        list(APPEND X_DEBIAN_PACKAGE_DEPENDS "libqt6core6")
-    endif()
-    if (NOT "${Qt6Gui_VERSION}" STREQUAL "")
-        list(APPEND X_DEBIAN_PACKAGE_DEPENDS "libqt6gui6")
-    endif()
-    if (NOT "${Qt6Widgets_VERSION}" STREQUAL "")
-        list(APPEND X_DEBIAN_PACKAGE_DEPENDS "libqt6widgets6")
-    endif()
-    if (NOT "${Qt6Sql_VERSION}" STREQUAL "")
-        list(APPEND X_DEBIAN_PACKAGE_DEPENDS "libqt6sql6")
-    endif()
-    if (NOT "${Qt6Network_VERSION}" STREQUAL "")
-        list(APPEND X_DEBIAN_PACKAGE_DEPENDS "libqt6network6")
+    # dpkg-shlibdeps is authoritative when enabled: it follows the linked ELF
+    # symbols through the build host's Debian symbols/shlibs database, including
+    # ABI transitions such as Debian 13's t64 Qt package names.  Keep any
+    # caller-supplied non-library dependencies, but do not append guessed Qt
+    # package names in that mode.
+    if (NOT CPACK_DEBIAN_PACKAGE_SHLIBDEPS)
+        # Qt5
+        if (NOT "${Qt5Core_VERSION}" STREQUAL "")
+            list(APPEND X_DEBIAN_PACKAGE_DEPENDS "libqt5core5a")
+            list(APPEND X_DEBIAN_PACKAGE_DEPENDS "libqt5dbus5") # TODO Check
+        endif()
+        if (NOT "${Qt5Gui_VERSION}" STREQUAL "")
+            list(APPEND X_DEBIAN_PACKAGE_DEPENDS "libqt5gui5")
+        endif()
+        if (NOT "${Qt5Widgets_VERSION}" STREQUAL "")
+            list(APPEND X_DEBIAN_PACKAGE_DEPENDS "libqt5widgets5")
+        endif()
+        if (NOT "${Qt5Svg_VERSION}" STREQUAL "")
+            list(APPEND X_DEBIAN_PACKAGE_DEPENDS "libqt5svg5")
+        endif()
+        if (NOT "${Qt5Sql_VERSION}" STREQUAL "")
+            list(APPEND X_DEBIAN_PACKAGE_DEPENDS "libqt5sql5")
+        endif()
+        if (NOT "${Qt5OpenGL_VERSION}" STREQUAL "")
+            list(APPEND X_DEBIAN_PACKAGE_DEPENDS "libqt5opengl5")
+        endif()
+        if (NOT "${Qt5Network_VERSION}" STREQUAL "")
+            list(APPEND X_DEBIAN_PACKAGE_DEPENDS "libqt5network5")
+        endif()
+        if (NOT "${Qt5Script_VERSION}" STREQUAL "")
+            list(APPEND X_DEBIAN_PACKAGE_DEPENDS "libqt5script5")
+        endif()
+        if (NOT "${Qt5ScriptTools_VERSION}" STREQUAL "")
+            list(APPEND X_DEBIAN_PACKAGE_DEPENDS "libqt5scripttools5")
+        endif()
+        # Qt6
+        if (NOT "${Qt6Core_VERSION}" STREQUAL "")
+            list(APPEND X_DEBIAN_PACKAGE_DEPENDS "libqt6core6")
+        endif()
+        if (NOT "${Qt6Gui_VERSION}" STREQUAL "")
+            list(APPEND X_DEBIAN_PACKAGE_DEPENDS "libqt6gui6")
+        endif()
+        if (NOT "${Qt6Widgets_VERSION}" STREQUAL "")
+            list(APPEND X_DEBIAN_PACKAGE_DEPENDS "libqt6widgets6")
+        endif()
+        if (NOT "${Qt6Sql_VERSION}" STREQUAL "")
+            list(APPEND X_DEBIAN_PACKAGE_DEPENDS "libqt6sql6")
+        endif()
+        if (NOT "${Qt6Network_VERSION}" STREQUAL "")
+            list(APPEND X_DEBIAN_PACKAGE_DEPENDS "libqt6network6")
+        endif()
     endif()
 
     string(REPLACE ";" ", " CPACK_DEBIAN_PACKAGE_DEPENDS "${X_DEBIAN_PACKAGE_DEPENDS}")
     message(STATUS CPACK_DEBIAN_PACKAGE_DEPENDS: ${CPACK_DEBIAN_PACKAGE_DEPENDS})
+
+    # CPack projects can opt in to a policy copyright without teaching this
+    # shared helper any project-specific source-tree layout.  Debian requires
+    # this exact lowercase package directory and uncompressed filename.
+    if(DEFINED X_DEBIAN_COPYRIGHT_FILE
+       AND NOT "${X_DEBIAN_COPYRIGHT_FILE}" STREQUAL "")
+        get_filename_component(_x_debian_copyright
+            "${X_DEBIAN_COPYRIGHT_FILE}" ABSOLUTE
+            BASE_DIR "${CMAKE_BINARY_DIR}")
+        if(NOT EXISTS "${_x_debian_copyright}"
+           OR IS_DIRECTORY "${_x_debian_copyright}"
+           OR IS_SYMLINK "${_x_debian_copyright}")
+            message(FATAL_ERROR
+                "X_DEBIAN_COPYRIGHT_FILE must name an existing ordinary file: "
+                "${_x_debian_copyright}")
+        endif()
+        install(FILES "${_x_debian_copyright}"
+            DESTINATION
+                "${CMAKE_INSTALL_DATAROOTDIR}/doc/${CPACK_DEBIAN_PACKAGE_NAME}"
+            RENAME "copyright")
+        unset(_x_debian_copyright)
+    endif()
 endif()
 
 if(APPLE)
