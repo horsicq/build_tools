@@ -40,13 +40,22 @@ endif()
 if(MSVC)
     add_compile_definitions(_CRT_SECURE_NO_WARNINGS _SCL_SECURE_NO_WARNINGS _CRT_NONSTDC_NO_DEPRECATE)
 
-    # Work around QTBUG-90568: Qt 5.15's qvector.h uses stdext::checked_array_iterator
-    # without including <iterator> itself. Older MSVC toolchains pulled that header in
-    # transitively; newer ones (as shipped on current CI images) don't, causing
-    # "stdext is not a class or namespace name" (fixed upstream only in Qt 5.15.3+).
-    # C++ only: <iterator> is not a C header, so forcing it into C sources (the bundled
-    # zlib/lzma/bzip2) fails with "STL1003: Unexpected compiler, expected C++ compiler".
-    add_compile_options($<$<COMPILE_LANGUAGE:CXX>:/FIiterator>)
+    # 2026-08-18: removed a global "/FIiterator" force-include that used to sit here as
+    # a workaround for QTBUG-90568 (Qt 5.15's qvector.h/qlist.h/qvarlengtharray.h use
+    # stdext::checked_array_iterator without including <iterator> themselves).
+    # It was a verified no-op against this Qt 5.15.2 installation: QtCore/qbytearray.h
+    # includes <string> and <iterator> unconditionally and is on the unconditional
+    # include path of all three headers (QVector -> qvector.h -> qhashfunctions.h ->
+    # qstring.h -> qbytearray.h -> <iterator>, per cl /showIncludes), so the bug cannot
+    # occur. Compiler output was byte-identical with and without the flag.
+    # It was also a hazard: the Visual Studio generator drops the COMPILE_LANGUAGE
+    # genex and applies the forced include target-wide, so any C source added under a
+    # scope using this helper failed with "STL1003: Unexpected compiler, expected C++
+    # compiler".
+    # If a future Qt or MSVC reintroduces the problem, reinstate it per source file
+    # (set_source_files_properties(... COMPILE_OPTIONS /FIiterator)) or per C++-only
+    # target -- NOT via a directory-level add_compile_options(), which the VS generator
+    # will apply to C too.
 endif()
 
 if(NOT DEFINED X_RESOURCES)
